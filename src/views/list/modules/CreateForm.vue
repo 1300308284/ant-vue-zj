@@ -13,8 +13,38 @@
         <a-form-item v-show="model && model.id > 0" label="主键ID">
           <a-input v-decorator="['id', { initialValue: 0 }]" disabled />
         </a-form-item>
-        <a-form-item label="描述">
-          <a-input v-decorator="['description', {rules: [{required: true, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        <a-form-item label="账套号">
+          <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="基金代码">
+          <a-input disabled v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="产品名称">
+          <a-input disabled v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="估值批次">
+          <a-input disabled v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="券商\期货商">
+          <a-input disabled v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="标题">
+          <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="发件人">
+          <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="附件个数">
+          <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="密码文件名">
+          <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="密码">
+          <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+        </a-form-item>
+        <a-form-item label="是否启用">
+          <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
         </a-form-item>
       </a-form>
     </a-spin>
