@@ -21,6 +21,7 @@
     -->
     <template v-slot:menuHeaderRender>
       <div>
+        <!-- 这里加中金的logo 和  title -->
         <logo-svg />
         <h1>{{ title }}</h1>
       </div>
@@ -53,12 +54,14 @@
 </template>
 
 <script>
-import { SettingDrawer, updateTheme } from '@ant-design-vue/pro-layout'
+// import { SettingDrawer, updateTheme } from '@ant-design-vue/pro-layout'
+import { SettingDrawer } from '@ant-design-vue/pro-layout'
 import { i18nRender } from '@/locales'
 import { mapState } from 'vuex'
 import { CONTENT_WIDTH_TYPE, SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
 
 import defaultSettings from '@/config/defaultSettings'
+import { asyncRouterMap } from '@/config/router.config.js'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import GlobalFooter from '@/components/GlobalFooter'
 import Ads from '@/components/Other/CarbonAds'
@@ -126,21 +129,24 @@ export default {
     })
   },
   mounted () {
-    const userAgent = navigator.userAgent
-    if (userAgent.indexOf('Edge') > -1) {
-      this.$nextTick(() => {
-        this.collapsed = !this.collapsed
-        setTimeout(() => {
-          this.collapsed = !this.collapsed
-        }, 16)
-      })
-    }
+    // const userAgent = navigator.userAgent
+    // if (userAgent.indexOf('Edge') > -1) {
+    //   this.$nextTick(() => {
+    //     this.collapsed = !this.collapsed
+    //     setTimeout(() => {
+    //       this.collapsed = !this.collapsed
+    //     }, 16)
+    //   })
+    // }
 
     // first update color
     // TIPS: THEME COLOR HANDLER!! PLEASE CHECK THAT!!
-    if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'true') {
-      updateTheme(this.settings.primaryColor)
-    }
+    // if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'true') {
+    //   updateTheme(this.settings.primaryColor)
+    // }
+    const routes = asyncRouterMap.find((item) => item.path === '/')
+    // const routes = this.mainMenu.find((item) => item.path === '/')
+    this.menus = (routes && routes.children) || []
   },
   methods: {
     i18nRender,
