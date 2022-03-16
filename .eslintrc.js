@@ -42,7 +42,7 @@ module.exports = {
       }
     ],
     'semi': [
-      2,
+      0,
       'never',
       {
         'beforeStatementContinuationChars': 'never'
