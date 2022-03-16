@@ -4,24 +4,29 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="规则编号">
-                <a-input v-model="queryParam.id" placeholder=""/>
+            <a-col :md="6" :sm="24">
+              <a-form-item label="账套号">
+                <a-input v-model.trim="queryParam.id" placeholder="请输入账套号"/>
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
+            <a-col :md="6" :sm="24">
+              <a-form-item label="券商\期货商">
                 <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">全部</a-select-option>
-                  <a-select-option value="1">关闭</a-select-option>
-                  <a-select-option value="2">运行中</a-select-option>
+                  <a-select-option value="0">券商期货商1</a-select-option>
+                  <a-select-option value="1">券商期货商2</a-select-option>
+                  <a-select-option value="2">券商期货商3</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
-            <template v-if="advanced">
+            <a-col :md="6" :sm="24">
+              <a-form-item label="产品名称">
+                <a-input v-model.trim="queryParam.callNo" placeholder="请输入产品名称" style="width: 100%"/>
+              </a-form-item>
+            </a-col>
+            <!-- <template v-if="advanced">
               <a-col :md="8" :sm="24">
-                <a-form-item label="调用次数">
-                  <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
+                <a-form-item label="产品名称">
+                  <a-input v-model="queryParam.callNo" style="width: 100%"/>
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
@@ -47,15 +52,15 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-            </template>
-            <a-col :md="!advanced && 8 || 24" :sm="24">
+            </template> -->
+            <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                <a @click="toggleAdvanced" style="margin-left: 8px">
+                <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
                   <a-icon :type="advanced ? 'up' : 'down'"/>
-                </a>
+                </a> -->
               </span>
             </a-col>
           </a-row>
@@ -64,16 +69,15 @@
 
       <div class="table-operator">
         <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-        <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
+        <!-- <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-            <!-- lock | unlock -->
             <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
           </a-menu>
           <a-button style="margin-left: 8px">
             批量操作 <a-icon type="down" />
           </a-button>
-        </a-dropdown>
+        </a-dropdown> -->
       </div>
 
       <s-table
@@ -82,25 +86,25 @@
         rowKey="key"
         :columns="columns"
         :data="loadData"
-        :alert="true"
-        :rowSelection="rowSelection"
+        :alert="false"
         showPagination="auto"
       >
+        <!-- :rowSelection="rowSelection" -->
         <span slot="serial" slot-scope="text, record, index">
           {{ index + 1 }}
         </span>
-        <span slot="status" slot-scope="text">
+        <!-- <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
         <span slot="description" slot-scope="text">
           <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
-        </span>
+        </span> -->
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">配置</a>
+            <a @click="handleEdit(record)">修改</a>
             <a-divider type="vertical" />
-            <a @click="handleSub(record)">订阅报警</a>
+            <a @click="handleSub(record)">删除</a>
           </template>
         </span>
       </s-table>
@@ -128,35 +132,67 @@ import CreateForm from './modules/CreateForm'
 
 const columns = [
   {
-    title: '#',
+    title: '序号',
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '规则编号',
+    title: '账套号',
     dataIndex: 'no'
   },
   {
-    title: '描述',
-    dataIndex: 'description',
-    scopedSlots: { customRender: 'description' }
+    title: '基金代码',
+    dataIndex: 'no'
   },
   {
-    title: '服务调用次数',
-    dataIndex: 'callNo',
-    sorter: true,
-    needTotal: true,
-    customRender: (text) => text + ' 次'
+    title: '产品名称',
+    dataIndex: 'no'
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' }
+    title: '估值时效',
+    dataIndex: 'no'
   },
   {
-    title: '更新时间',
-    dataIndex: 'updatedAt',
-    sorter: true
+    title: '券商\\期货商',
+    dataIndex: 'no'
   },
+  {
+    title: '标题',
+    dataIndex: 'no'
+  },
+  {
+    title: '发件人',
+    dataIndex: 'no'
+  },
+  {
+    title: '附件个数',
+    dataIndex: 'no'
+  },
+  // {
+  //   title: '密码文件名',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   title: '描述',
+  //   dataIndex: 'description',
+  //   scopedSlots: { customRender: 'description' }
+  // },
+  // {
+  //   title: '服务调用次数',
+  //   dataIndex: 'callNo',
+  //   sorter: true,
+  //   needTotal: true,
+  //   customRender: (text) => text + ' 次'
+  // },
+  // {
+  //   title: '状态',
+  //   dataIndex: 'status',
+  //   scopedSlots: { customRender: 'status' }
+  // },
+  // {
+  //   title: '更新时间',
+  //   dataIndex: 'updatedAt',
+  //   sorter: true
+  // },
   {
     title: '操作',
     dataIndex: 'action',
