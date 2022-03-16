@@ -11,11 +11,37 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item label="券商\期货商">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
+                <a-select
+                  show-search
+                  v-model="queryParam.status"
+                  placeholder="请选择"
+                  default-value="0"
+                  :default-active-first-option="false"
+                  :show-arrow="false"
+                  :filter-option="false"
+                  :not-found-content="null"
+                  @search="handleSearch"
+                  @change="handleChange" >
                   <a-select-option value="0">券商期货商1</a-select-option>
                   <a-select-option value="1">券商期货商2</a-select-option>
                   <a-select-option value="2">券商期货商3</a-select-option>
                 </a-select>
+                <!-- <a-select
+                  show-search
+                  :value="value"
+                  placeholder="input search text"
+                  style="width: 200px"
+                  :default-active-first-option="false"
+                  :show-arrow="false"
+                  :filter-option="false"
+                  :not-found-content="null"
+                  @search="handleSearch"
+                  @change="handleChange"
+                >
+                  <a-select-option v-for="d in data" :key="d.value">
+                    {{ d.text }}
+                  </a-select-option>
+                </a-select> -->
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
@@ -123,6 +149,7 @@
 </template>
 
 <script>
+
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { getRoleList, getServiceList } from '@/api/manage'
@@ -231,6 +258,8 @@ export default {
   data () {
     this.columns = columns
     return {
+      data: [], // 券商/期货商
+      value: undefined, // 可以替换
       // create model
       visible: false,
       confirmLoading: false,
@@ -272,6 +301,14 @@ export default {
     }
   },
   methods: {
+    handleSearch (value) { // TODO ?待接口
+      // fetch(value, data => (this.data = data))
+    },
+    handleChange (value) { // TODO ?待接口
+      console.log(value)
+      this.value = value
+      // fetch(value, data => (this.data = data))
+    },
     handleAdd () {
       this.mdl = null
       this.visible = true
