@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="新建规则"
+    :title="model && model.id > 0 ? '修改规则' : '新建规则'"
     :width="'calc(100vw - 700px)'"
     :visible="visible"
     :confirmLoading="loading"
@@ -9,11 +9,6 @@
   >
     <a-spin :spinning="loading">
       <a-form :form="form" v-bind="formLayout">
-        <!-- 检查是否有 id 并且大于0，大于0是修改。其他是新增，新增不显示主键ID -->
-        <a-form-item v-show="model && model.id > 0" label="主键ID">
-          <a-input v-decorator="['id', { initialValue: 0 }]" disabled />
-        </a-form-item>
-
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="账套号">
