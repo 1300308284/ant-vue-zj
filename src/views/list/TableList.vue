@@ -436,3 +436,8 @@ export default {
   }
 }
 </script>
+<style scoped lang="less">
+  /deep/ .ant-page-header-heading{
+    display: none;
+  }
+</style>
