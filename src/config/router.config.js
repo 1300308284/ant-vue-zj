@@ -12,7 +12,8 @@ export const asyncRouterMap = [
     path: '/',
     name: 'index',
     component: BasicLayout,
-    meta: { title: 'menu.home' },
+    // meta: { title: 'menu.home' }, // 更换语言in18
+    meta: { title: '主页' },
     redirect: '/dashboard/workplace',
     children: [
       // dashboard
@@ -76,21 +77,23 @@ export const asyncRouterMap = [
         name: 'list',
         component: RouteView,
         redirect: '/list/table-list',
-        meta: { title: 'menu.list', icon: 'table', permission: ['table'] },
+        // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
+        meta: { title: '托管组邮件规则管理', icon: 'table', permission: ['table'] },
         children: [
           {
             path: '/list/table-list/:pageNo([1-9]\\d*)?',
             name: 'TableListWrapper',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/list/TableList'),
-            meta: { title: 'menu.list.table-list', keepAlive: true, permission: ['table'] }
+            meta: { title: '交易文件规则', keepAlive: true, permission: ['table'] }
+          },
+          {
+            path: '/list/basic-list',
+            name: 'BasicList',
+            component: () => import('@/views/list/BasicList'),
+            // component: () => import('@/views/list/TableList'),
+            meta: { title: '对账单文件规则', keepAlive: true, permission: ['table'] }
           }
-          // {
-          //   path: '/list/basic-list',
-          //   name: 'BasicList',
-          //   component: () => import('@/views/list/BasicList'),
-          //   meta: { title: 'menu.list.basic-list', keepAlive: true, permission: ['table'] }
-          // },
           // {
           //   path: '/list/card',
           //   name: 'CardList',
