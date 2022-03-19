@@ -143,7 +143,7 @@ export default {
       this.filters = filters
       this.sorter = sorter
 
-      this.localLoading = true
+      // this.localLoading = true // 列表暂时不loading, 打开看需求
       const parameter = Object.assign({
         pageNo: (pagination && pagination.current) ||
           this.showPagination && this.localPagination.current || this.pageNum,
