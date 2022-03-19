@@ -12,12 +12,12 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="账套号">
-              <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input v-decorator.trim="['faccountCode', {rules: [{required: false, min: 5, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="基金代码">
-              <a-input :disabled="false" v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input :disabled="false" v-decorator.trim="['fundCode', {rules: [{required: false, min: 5, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -25,12 +25,12 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="产品名称">
-              <a-input :disabled="false" v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input :disabled="false" v-decorator.trim="['productName', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="估值批次">
-              <a-input :disabled="false" v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input :disabled="false" v-decorator.trim="['valBatchName', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -38,12 +38,12 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="券商\期货商">
-              <a-input :disabled="false" v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input :disabled="false" v-decorator.trim="['dealerName', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="标题">
-              <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input v-decorator.trim="['title', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -51,36 +51,36 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="发件人">
-              <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input v-decorator.trim="['senders', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="附件个数">
-              <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input v-decorator.trim="['attachCount', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="密码文件名">
-              <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input v-decorator.trim="['ciperFileName', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="密码">
-              <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input v-decorator.trim="['ciper', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="是否启用">
-              <a-switch default-checked @change="handleOnChange" />
+              <a-switch default-checked @change="handleOnChange"/>
             </a-form-item>
           </a-col>
           <!-- <a-col :md="12" :sm="24">
             <a-form-item label="密码">
-              <a-input v-decorator="['description', {rules: [{required: false, min: 5, message: '请输入至少五个字符的规则描述！'}]}]" />
+              <a-input v-decorator.trim="['description', {rules: [{required: false, min: 1, message: '请输入至少五个字符的规则描述！'}]}]" />
             </a-form-item>
           </a-col> -->
         </a-row>
@@ -105,7 +105,19 @@
 import pick from 'lodash.pick'
 
 // 表单字段
-const fields = ['description', 'id']
+const fields = [
+  'faccountCode',
+  'fundCode',
+  'productName',
+  'valBatchName',
+  'dealerName',
+  'title',
+  'senders',
+  'attachCount',
+  'ciperFileName',
+  'ciper',
+  'status'
+]
 
 export default {
   props: {
