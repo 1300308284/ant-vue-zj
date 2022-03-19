@@ -10,11 +10,13 @@ const baseApi = {
   updateEmailRuleStatus: baseUrl + '/updateEmailRuleStatus' // 修改邮箱规则是否可用状态
 }
 
-export const queryEmailRuleInfo = data => request({ url: baseApi.queryEmailRuleInfo + '?' + Qs.stringify(data), method: 'get' })
-export const queryDealerInfo = data => request({ url: baseApi.queryDealerInfo + '?' + Qs.stringify(data), method: 'get' })
-export const queryEmailRuleById = data => request({ url: baseApi.queryEmailRuleById, method: 'get', data })
-export const saveEmailRuleAndValuationTime = data => request({ url: baseApi.saveEmailRuleAndValuationTime + '?' + Qs.stringify(data), method: 'get' })
-export const updateEmailRuleStatus = data => request({ url: baseApi.queryEmupdateEmailRuleStatusailRuleInfo, method: 'get', data })
+const getData = data => ('?' + Qs.stringify(data))
+
+export const queryEmailRuleInfo = data => request({ url: baseApi.queryEmailRuleInfo + '?' + getData(data), method: 'get' })
+export const queryDealerInfo = data => request({ url: baseApi.queryDealerInfo + '?' + getData(data), method: 'get' })
+export const queryEmailRuleById = data => request({ url: baseApi.queryEmailRuleById + getData(data), method: 'get' })
+export const saveEmailRuleAndValuationTime = data => request({ url: baseApi.saveEmailRuleAndValuationTime + getData(data), method: 'get' })
+export const updateEmailRuleStatus = data => request({ url: baseApi.queryEmupdateEmailRuleStatusailRuleInfo + getData(data), method: 'get' })
 
 // export function login (parameter) {
 //   return request({
