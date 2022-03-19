@@ -13,7 +13,7 @@ export default {
   name: 'Exception404',
   methods: {
     toHome () {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/list' }) // TODO 暂时跳到list页, 后根据需求到首页
     }
   }
 }
