@@ -11,9 +11,9 @@ const baseApi = {
 }
 
 export const queryEmailRuleInfo = data => request({ url: baseApi.queryEmailRuleInfo + '?' + Qs.stringify(data), method: 'get' })
-export const queryDealerInfo = data => request({ url: baseApi.queryDealerInfo, method: 'get', data })
+export const queryDealerInfo = data => request({ url: baseApi.queryDealerInfo + '?' + Qs.stringify(data), method: 'get' })
 export const queryEmailRuleById = data => request({ url: baseApi.queryEmailRuleById, method: 'get', data })
-export const saveEmailRuleAndValuationTime = data => request({ url: baseApi.saveEmailRuleAndValuationTime, method: 'get', data })
+export const saveEmailRuleAndValuationTime = data => request({ url: baseApi.saveEmailRuleAndValuationTime + '?' + Qs.stringify(data), method: 'get' })
 export const updateEmailRuleStatus = data => request({ url: baseApi.queryEmupdateEmailRuleStatusailRuleInfo, method: 'get', data })
 
 // export function login (parameter) {
