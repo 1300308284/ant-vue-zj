@@ -12,12 +12,12 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="账套号">
-              <a-input v-decorator.trim="['faccountCode', {rules: [{required: false, min: 5, message: '请输入至少一个字符！'}]}]" />
+              <a-input v-decorator.trim="['faccountCode']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="基金代码">
-              <a-input :disabled="false" v-decorator.trim="['fundCode', {rules: [{required: false, min: 5, message: '请输入至少一个字符！'}]}]" />
+              <a-input :disabled="false" v-decorator.trim="['fundCode']" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -25,12 +25,12 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="产品名称">
-              <a-input :disabled="false" v-decorator.trim="['productName', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
+              <a-input :disabled="false" v-decorator.trim="['productName']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="估值批次">
-              <a-input :disabled="false" v-decorator.trim="['valBatchName', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
+              <a-input :disabled="false" v-decorator.trim="['valBatchName', {rules: [{required: true, min: 3, message: '请按格式T+0填写'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -38,12 +38,12 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="券商\期货商">
-              <a-input :disabled="false" v-decorator.trim="['dealerName', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
+              <a-input :disabled="false" v-decorator.trim="['dealerName']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="标题">
-              <a-input v-decorator.trim="['title', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
+              <a-input v-decorator.trim="['title']" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -51,24 +51,24 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="发件人">
-              <a-input v-decorator.trim="['senders', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
+              <a-input v-decorator.trim="['senders']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="附件个数">
-              <a-input v-decorator.trim="['attachCount', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
+              <a-input v-decorator.trim="['attachCount']" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="密码文件名">
-              <a-input v-decorator.trim="['ciperFileName', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
+              <a-input v-decorator.trim="['ciperFileName']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="密码">
-              <a-input v-decorator.trim="['ciper', {rules: [{required: false, min: 1, message: '请输入至少一个字符！'}]}]" />
+              <a-input v-decorator.trim="['ciper']" />
             </a-form-item>
           </a-col>
         </a-row>
