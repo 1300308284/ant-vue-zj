@@ -13,13 +13,13 @@
               <a-form-item label="券商\期货商">
                 <a-select
                   show-search
-                  v-model.trim="queryParam.dealerCode"
                   placeholder="请选择"
                   default-value="0"
                   :default-active-first-option="false"
                   :show-arrow="false"
-                  :filter-option="false"
+                  :filter-option="true"
                   :not-found-content="null"
+                  :label-in-value="true"
                   @search="handleSearch"
                   @change="handleChange" >
                   <!-- <a-select-option value="0">券商期货商1</a-select-option>
@@ -28,7 +28,7 @@
                   <a-select-option
                     v-for="(item,index) in dealerData"
                     :key="item.dealerCode + index"
-                    :value="item.dealerCode">
+                    :value="item.dealerName">
                     {{ item.dealerName }}
                   </a-select-option>
                 </a-select>
@@ -115,7 +115,7 @@
       <s-table
         ref="table"
         size="default"
-        :rowKey="(record) => { console.log('>rowKey是啥>>:', record); record.data.faccountCode }"
+        :rowKey="(record) => record.faccountCode + record.id"
         :columns="columns"
         :data="loadData"
         :alert="false"
@@ -158,8 +158,9 @@
 import {
   queryDealerInfo,
   queryEmailRuleInfo,
+  queryEmailRuleById,
   saveEmailRuleAndValuationTime
-  } from '@/api/emailRuleConfig/emailRuleConfig'
+  } from '@/api/emailRuleConfig/dealFileRule'
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'
@@ -287,7 +288,7 @@ export default {
           .then(res => {
           this.localLoading = false
             console.log('>queryEmailRuleInfo>成功>:', res)
-            return res.result
+            return res.dataValue
           }).catch(err => {
           this.localLoading = false
             console.log('queryEmailRuleInfo 请求失败>err>>:', err)
@@ -307,6 +308,9 @@ export default {
   },
   created () {
     // getRoleList({ t: new Date() }) // 暂时没有用户, 看需求
+    // TODO groupCode;//业务组编码 ----- 必传  所有这个菜单下都需要这个
+    // TODO 托管的code：groupCode：tg，外包的code：groupCode：wb；交易的code：bizCode：01，对账单的code：bizCode：02
+    // this.queryParam.groupCode = this.$router.query?.groupCode || 'tg'
     this.init()
   },
   computed: {
@@ -321,7 +325,7 @@ export default {
     init () {
       queryDealerInfo().then(res => {
         console.log('>res>>:', res)
-        this.dealerData = res
+        this.dealerData = res.dataValue
       }).catch(err => {
         console.log('>err>>:', err)
       })
@@ -336,10 +340,11 @@ export default {
     handleSearch (value) { // TODO ?待接口
       // fetch(value, data => (this.data = data))
     },
-    handleChange (value) { // TODO ?待接口
-      console.log(value)
-      this.value = value
-      // fetch(value, data => (this.data = data))
+    handleChange (value, aa) { // 确认用name不用code
+      console.log('change11', value)
+      // console.log('change22', aa)
+      // this.queryParam.dealerCode = value?.key
+      this.queryParam.dealerName = value?.key
     },
     handleAdd () {
       this.mdl = null
