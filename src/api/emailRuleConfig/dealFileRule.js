@@ -7,16 +7,25 @@ const baseApi = {
   queryDealerInfo: baseUrl + '/queryDealerInfo', // 查询所有的券商信息
   queryEmailRuleById: baseUrl + '/queryEmailRuleById', // 修改的回显查询(根据id查询)
   saveEmailRuleAndValuationTime: baseUrl + '/saveEmailRuleAndValuationTime', // 新增或修改数据（邮件规则及估值批次）
-  updateEmailRuleStatus: baseUrl + '/updateEmailRuleStatus' // 修改邮箱规则是否可用状态
+  updateEmailRuleStatus: baseUrl + '/updateEmailRuleStatus', // 修改邮箱规则是否可用状态
+  queryFaccountInfo: baseUrl + '/queryFaccountInfo' // 根据账套号和业务code调用接口获取相关信息
 }
 
 // const getData = data => ('?' + Qs.stringify(data))
 
-export const queryEmailRuleInfo = params => request({ url: baseApi.queryEmailRuleInfo, method: 'get', params })
-export const queryDealerInfo = params => request({ url: baseApi.queryDealerInfo, method: 'get', params })
-export const queryEmailRuleById = params => request({ url: baseApi.queryEmailRuleById, method: 'get', params })
-export const saveEmailRuleAndValuationTime = data => request({ url: baseApi.saveEmailRuleAndValuationTime, method: 'post', data })
-export const updateEmailRuleStatus = data => request({ url: baseApi.queryEmupdateEmailRuleStatusailRuleInfo, method: 'post', data })
+// 菜单入口类型: 如下
+// 托管的code：groupCode：tg，
+// 外包的code：groupCode：wb；
+// 交易的code：bizCode：01，
+// 对账单的code：bizCode：02
+const assignData = data => ({ ...data, groupCode: 'tg' }) // get不用
+
+export const queryEmailRuleInfo = data => request({ url: baseApi.queryEmailRuleInfo, method: 'post', data: assignData(data) })
+export const queryDealerInfo = params => request({ url: baseApi.queryDealerInfo, method: 'get', params: assignData(params) })
+export const queryEmailRuleById = params => request({ url: baseApi.queryEmailRuleById, method: 'get', params: assignData(params) })
+export const saveEmailRuleAndValuationTime = data => request({ url: baseApi.saveEmailRuleAndValuationTime, method: 'post', data: assignData(data) })
+export const updateEmailRuleStatus = data => request({ url: baseApi.updateEmailRuleStatus, method: 'post', data: assignData(data) })
+export const queryFaccountInfo = params => request({ url: baseApi.queryFaccountInfo, method: 'get', params: assignData(params) })
 
 // export function login (parameter) {
 //   return request({

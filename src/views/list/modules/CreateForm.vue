@@ -4,7 +4,7 @@
     :width="'calc(100vw - 700px)'"
     :visible="visible"
     :confirmLoading="loading"
-    @ok="() => { $emit('ok') }"
+    @ok="() => { $emit('ok', model) }"
     @cancel="() => { $emit('cancel') }"
   >
     <a-spin :spinning="loading">
@@ -12,7 +12,7 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="账套号">
-              <a-input v-decorator.trim="['faccountCode']" />
+              <a-input v-decorator.trim="['faccountCode']" @change="handleFaccountCodeChange"/>
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
@@ -56,7 +56,7 @@
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="附件个数">
-              <a-input v-decorator.trim="['attachCount']" />
+              <a-input v-decorator.trim="['attachCount', { rules: [{type: 'string'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -72,18 +72,13 @@
             </a-form-item>
           </a-col>
         </a-row>
-        <a-row :gutter="48">
+        <!-- <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="是否启用">
               <a-switch default-checked @change="handleOnChange"/>
             </a-form-item>
           </a-col>
-          <!-- <a-col :md="12" :sm="24">
-            <a-form-item label="密码">
-              <a-input v-decorator.trim="['description', {rules: [{required: false, min: 1, message: '请输入至少五个字符的规则描述！'}]}]" />
-            </a-form-item>
-          </a-col> -->
-        </a-row>
+        </a-row> -->
         <a-row>
           <a-col>
             <h3>规则说明: </h3>
@@ -103,6 +98,7 @@
 
 <script>
 import pick from 'lodash.pick'
+import debounce from 'lodash.debounce'
 
 // 表单字段
 const fields = [
@@ -163,7 +159,11 @@ export default {
   methods: {
     handleOnChange (checked) {
       console.log(`a-switch to ${checked}`);
-    }
+    },
+    handleFaccountCodeChange: debounce(function (item, val) {
+      // TODO 待此帐套号item.target.value查相关信息
+      console.log('>val>账套号:111>:', item.target.value)
+    }, 1000)
   }
 }
 </script>

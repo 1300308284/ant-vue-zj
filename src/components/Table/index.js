@@ -142,7 +142,6 @@ export default {
     loadData (pagination, filters = this.filters, sorter = this.sorter) {
       this.filters = filters
       this.sorter = sorter
-
       // this.localLoading = true // 列表暂时不loading, 打开看需求
       const parameter = Object.assign({
         pageNo: (pagination && pagination.current) ||
@@ -164,18 +163,23 @@ export default {
       // eslint-disable-next-line
       if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
         result.then(r => {
+          console.log('>result结果::>>:', r)
           this.localPagination = this.showPagination && Object.assign({}, this.localPagination, {
-            current: r.pageNo, // 返回结果中的当前分页数
-            total: r.totalCount, // 返回结果中的总记录数
+            // current: r.pageNo, // TODO 暂无分页 返回结果中的当前分页数
+            // total: r.totalCount, // TODO 暂无分页 返回结果中的总记录数
             showSizeChanger: this.showSizeChanger,
             pageSize: (pagination && pagination.pageSize) ||
               this.localPagination.pageSize
           }) || false
           // 为防止删除数据后导致页面当前页面数据长度为 0 ,自动翻页到上一页
-          if (r.data.length === 0 && this.showPagination && this.localPagination.current > 1) {
+          // TODO 接口可能改数据结构
+          // if (r.data.length === 0 && this.showPagination && this.localPagination.current > 1) {
+          if (r.length === 0 && this.showPagination && this.localPagination.current > 1) {
             this.localPagination.current--
             this.loadData()
             return
+          } else {
+            console.log('>r返回数据不是00000>>:', r)
           }
 
           // 这里用于判断接口是否有返回 r.totalCount 且 this.showPagination = true 且 pageNo 和 pageSize 存在 且 totalCount 小于等于 pageNo * pageSize 的大小
@@ -185,11 +189,15 @@ export default {
               this.localPagination.hideOnSinglePage = true
             }
           } catch (e) {
+            console.log('>tryl 报错e catch>>:', e)
             this.localPagination = false
           }
-          this.localDataSource = r.data // 返回结果中的数组数据
+          // this.localDataSource = r.data // 返回结果中的数组数据
+          this.localDataSource = r // TODO 接口可能改数据结构 返回结果中的数组数据
           this.localLoading = false
         })
+      } else {
+        console.log('>查询列表返回结果result>>:', result)
       }
     },
     initTotalList (columns) {

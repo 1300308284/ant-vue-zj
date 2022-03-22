@@ -13,6 +13,7 @@
               <a-form-item label="券商\期货商">
                 <a-select
                   show-search
+                  v-model="dealerNameTemp"
                   placeholder="请选择"
                   default-value="0"
                   :default-active-first-option="false"
@@ -22,9 +23,7 @@
                   :label-in-value="true"
                   @search="handleSearch"
                   @change="handleChange" >
-                  <!-- <a-select-option value="0">券商期货商1</a-select-option>
-                  <a-select-option value="1">券商期货商2</a-select-option>
-                  <a-select-option value="2">券商期货商3</a-select-option> -->
+                  <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
                   <a-select-option
                     v-for="(item,index) in dealerData"
                     :key="item.dealerCode + index"
@@ -88,7 +87,7 @@
             <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, dealerNameTemp='')">重置</a-button>
                 <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
                   <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -115,7 +114,7 @@
       <s-table
         ref="table"
         size="default"
-        :rowKey="(record) => record.faccountCode + record.id"
+        :rowKey="(record) => record.faccountCode + record.id + record.valBatchName"
         :columns="columns"
         :data="loadData"
         :alert="false"
@@ -124,6 +123,15 @@
         <!-- :rowSelection="rowSelection" -->
         <span slot="serial" slot-scope="text, record, index">
           {{ index + 1 }}
+        </span>
+        <span slot="status" slot-scope="record">
+          <template>
+            <a-switch
+              size="small"
+              :loading="recordId === record.id"
+              :defaultChecked="record.status === '0' ? true : false"
+              @change="handleOnChange($event, record)"/>
+          </template>
         </span>
         <!-- <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
@@ -135,8 +143,8 @@
         <span slot="action" slot-scope="text, record">
           <template>
             <a @click="handleEdit(record)">修改</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a>
+            <!-- <a-divider type="vertical" />
+            <a @click="handleSub(record)">删除</a> -->
           </template>
         </span>
       </s-table>
@@ -159,6 +167,7 @@ import {
   queryDealerInfo,
   queryEmailRuleInfo,
   queryEmailRuleById,
+  updateEmailRuleStatus,
   saveEmailRuleAndValuationTime
   } from '@/api/emailRuleConfig/dealFileRule'
 import moment from 'moment'
@@ -186,8 +195,8 @@ const columns = [
     dataIndex: 'productName'
   },
   {
-    title: '估值时效',
-    dataIndex: 'logTime'
+    title: '估值批次',
+    dataIndex: 'valBatchName'
   },
   {
     title: '券商\\期货商',
@@ -204,6 +213,10 @@ const columns = [
   {
     title: '附件个数',
     dataIndex: 'attachCount'
+  },
+  {
+    title: '启用',
+    scopedSlots: { customRender: 'status' }
   },
   // {
   //   title: '密码文件名',
@@ -269,6 +282,8 @@ export default {
   data () {
     this.columns = columns
     return {
+      recordId: '',
+      dealerNameTemp: '',
       dealerData: [], // 券商/期货商list
       emailRuleList: [], // 规则列表
       value: undefined, // 可以替换
@@ -322,6 +337,21 @@ export default {
     }
   },
   methods: {
+    handleOnChange (statusChange, record) {
+      this.recordId = record.id
+      console.log('>status>>:', statusChange)
+      console.log('>record>>:', record.id)
+      const status = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
+      const id = record.id // 此条id
+      updateEmailRuleStatus({ id, status }).then(res => {
+        this.recordId = null
+        console.log(status ? '>启用成功>>:' : '>禁用成功>>:', res)
+        this.loadData()
+      }).catch(err => {
+        this.recordId = null
+        console.log('>启用失败>>:', err)
+      })
+    },
     init () {
       queryDealerInfo().then(res => {
         console.log('>res>>:', res)
@@ -338,7 +368,17 @@ export default {
       // })
     },
     handleSearch (value) { // TODO ?待接口
+      console.log('>serach--11----->:', value)
       // fetch(value, data => (this.data = data))
+      const cloneData = JSON.parse(JSON.stringify(this.dealerData))
+      value && (this.dealerData = cloneData.map((item, index) => {
+        if (item.dealerName?.indexOf(value) > -1) {
+          console.log('>匹配查到了>>:', item)
+          return item
+        } else {
+          // console.log('>没有匹配到>>:', item.dealerName)
+        }
+      }))
     },
     handleChange (value, aa) { // 确认用name不用code
       console.log('change11', value)
@@ -351,15 +391,25 @@ export default {
       this.visible = true
     },
     handleEdit (record) {
-      this.visible = true
+      console.log('>xiugai 修改>>:', record)
       this.mdl = { ...record }
+      queryEmailRuleById({ id: record.id }).then(res => {
+        // console.log('>queryEmailRuleById>修改id>:', res)
+        if (res.status === 1) {
+          // this.mdl = res.dataValue
+          this.visible = true
+        }
+      }).catch(err => {
+        console.log('>queryEmailRuleById>异常列表 by id >:', err)
+      })
     },
-    handleOk () {
+    handleOk (modal) {
+      console.log('>modal>子组件发射来的值>:', modal)
       const form = this.$refs.createModal.form
       this.confirmLoading = true
       form.validateFields((errors, values) => {
         if (!errors) {
-          console.log('新增校验, 失败values', values)
+          console.log('新增校验, 成功values', values)
           if (values.id > 0) {
             // 修改 e.g.
             new Promise((resolve, reject) => {
@@ -378,6 +428,7 @@ export default {
             })
           } else {
             // 新增
+            modal?.id && (values.id = modal?.id)
             saveEmailRuleAndValuationTime(values).then(res => {
               console.log('>新增>>:', res)
               this.visible = false
@@ -409,6 +460,8 @@ export default {
             // })
           }
         } else {
+          console.log('>校验失败>errors>:', errors)
+          console.log('>校验失败>values>:', values)
           this.confirmLoading = false
         }
       })

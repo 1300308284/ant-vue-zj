@@ -112,8 +112,7 @@ const vueConfig = {
       // }
       '/emailRule': { // TODO 有接口后再调整
         // target: 'http://127.0.0.1:8088/', // http://localhost:8088/emailRule/queryDealerInfo
-        target: 'http://10.118.188.10:8088/', // http://localhost:8088/emailRule/queryDealerInfo
-        ws: true,
+        target: 'http://172.23.0.137:8088/',
         changeOrigin: true
       }
     }
