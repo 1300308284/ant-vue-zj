@@ -14,7 +14,8 @@ export const asyncRouterMap = [
     component: BasicLayout,
     // meta: { title: 'menu.home' }, // 更换语言in18
     meta: { title: '主页' },
-    redirect: '/dashboard/workplace',
+    // redirect: '/dashboard/workplace',
+    redirect: '/zjEmail/tgList/table-list',
     children: [
       // dashboard
       // {
@@ -76,57 +77,90 @@ export const asyncRouterMap = [
         path: '/list',
         name: 'list',
         component: RouteView,
+        redirect: '/zjEmail/tgList/table-list',
+        // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
+        meta: { title: '托管组邮件规则管理' },
+        children: [
+          {
+            // path: '/list/table-list/:pageNo([1-9]\\d*)?',
+            path: '/list/table-list/:groupCode=tg?',
+            name: 'TableListWrapper',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/zjEmail/tgList/TableList'),
+            meta: { title: '交易文件规则', keepAlive: true, permission: ['table'] }
+          },
+          {
+            path: '/list/basic-list/:groupCode=tg?',
+            name: 'BasicList',
+            component: () => import('@/views/zjEmail/tgList/BasicList'),
+            // component: () => import('@/views/list/TableList'),
+            meta: { title: '对账单文件规则', keepAlive: true, permission: ['table'] }
+          }
+        ]
+      },
+      {
+        path: '/list',
+        name: 'list',
+        component: RouteView,
         redirect: '/list/table-list',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
-        meta: { title: '托管组邮件规则管理', icon: 'table', permission: ['table'] },
+        meta: { title: '外包交易文件规则' },
+        children: [
+          {
+            path: '/list/table-list/:groupCode=wb?',
+            name: 'TableListWrapper',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/zjEmail/wbList/TableList'),
+            meta: { title: '外包对账单文件规则', keepAlive: true, permission: ['table'] }
+          },
+          {
+            path: '/list/basic-list/:groupCode=wb?',
+            name: 'BasicList',
+            component: () => import('@/views/zjEmail/wbList/BasicList'),
+            // component: () => import('@/views/list/TableList'),
+            meta: { title: '重复交易文件/对账单', keepAlive: true, permission: ['table'] }
+          }
+        ]
+      },
+      {
+        path: '/list',
+        name: 'list',
+        component: RouteView,
+        redirect: '/list/table-list',
+        // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
+        meta: { title: '业务规制管理' },
         children: [
           {
             path: '/list/table-list/:pageNo([1-9]\\d*)?',
             name: 'TableListWrapper',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/list/TableList'),
-            meta: { title: '交易文件规则', keepAlive: true, permission: ['table'] }
+            component: () => import('@/views/zjEmail/ywglList/TableList'),
+            meta: { title: '估值时效配置', keepAlive: true, permission: ['table'] }
+          }
+        ]
+      },
+      {
+        path: '/list',
+        name: 'list',
+        component: RouteView,
+        redirect: '/list/table-list',
+        // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
+        meta: { title: '邮件管理' },
+        children: [
+          {
+            path: '/list/table-list/:pageNo([1-9]\\d*)?',
+            name: 'TableListWrapper',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/zjEmail/yjglList/TableList'),
+            meta: { title: '邮箱管理', keepAlive: true, permission: ['table'] }
           },
           {
             path: '/list/basic-list',
             name: 'BasicList',
-            component: () => import('@/views/list/BasicList'),
+            component: () => import('@/views/zjEmail/yjglList/BasicList'),
             // component: () => import('@/views/list/TableList'),
-            meta: { title: '对账单文件规则', keepAlive: true, permission: ['table'] }
+            meta: { title: '邮箱绑定业务', keepAlive: true, permission: ['table'] }
           }
-          // {
-          //   path: '/list/card',
-          //   name: 'CardList',
-          //   component: () => import('@/views/list/CardList'),
-          //   meta: { title: 'menu.list.card-list', keepAlive: true, permission: ['table'] }
-          // },
-          // {
-          //   path: '/list/search',
-          //   name: 'SearchList',
-          //   component: () => import('@/views/list/search/SearchLayout'),
-          //   redirect: '/list/search/article',
-          //   meta: { title: 'menu.list.search-list', keepAlive: true, permission: ['table'] },
-          //   children: [
-          //     {
-          //       path: '/list/search/article',
-          //       name: 'SearchArticles',
-          //       component: () => import('../views/list/search/Article'),
-          //       meta: { title: 'menu.list.search-list.articles', permission: ['table'] }
-          //     },
-          //     {
-          //       path: '/list/search/project',
-          //       name: 'SearchProjects',
-          //       component: () => import('../views/list/search/Projects'),
-          //       meta: { title: 'menu.list.search-list.projects', permission: ['table'] }
-          //     },
-          //     {
-          //       path: '/list/search/application',
-          //       name: 'SearchApplications',
-          //       component: () => import('../views/list/search/Applications'),
-          //       meta: { title: 'menu.list.search-list.applications', permission: ['table'] }
-          //     }
-          //   ]
-          // }
         ]
       }
       // zj邮件规则配置
