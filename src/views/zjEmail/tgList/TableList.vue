@@ -169,7 +169,7 @@ import {
   queryEmailRuleById,
   updateEmailRuleStatus,
   saveEmailRuleAndValuationTime
-  } from '@/api/emailRuleConfig/dealFileRule'
+  } from '@/api/zjApis/emailRuleConfig/dealFileRule'
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'

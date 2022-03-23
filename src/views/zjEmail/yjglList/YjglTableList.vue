@@ -94,7 +94,7 @@ import {
   saveEmailAccount,
   updateEmailStatus
   // updateEmailPushFlg // TODO 是否推送
-  } from '@/api/emailManage/index.js'
+  } from '@/api/zjApis/emailManage/index.js'
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'
