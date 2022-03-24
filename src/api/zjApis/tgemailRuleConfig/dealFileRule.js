@@ -18,7 +18,8 @@ const baseApi = {
 // 外包的code：groupCode：wb；
 // 交易的code：bizCode：01，
 // 对账单的code：bizCode：02
-const assignData = data => ({ ...data, groupCode: 'tg' }) // get不用
+// const assignData = data => ({ ...data, groupCode: data.gcFlag === 'tg' ? 'tg' : 'wb', bizCode: data.bcFlag === '01' ? '01' : '02' })
+const assignData = data => ({ ...data, groupCode: 'tg' })
 
 export const queryEmailRuleInfo = data => request({ url: baseApi.queryEmailRuleInfo, method: 'post', data: assignData(data) })
 export const queryDealerInfo = params => request({ url: baseApi.queryDealerInfo, method: 'get', params: assignData(params) })

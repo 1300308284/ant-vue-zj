@@ -77,61 +77,62 @@ export const asyncRouterMap = [
         path: '/list',
         name: 'tgList',
         component: RouteView,
-        redirect: '/zjEmail/tgList/table-list',
+        // redirect: '/zjEmail/tgList/table-list',
+        redirect: '/list/table-list/groupCode=tg&bizCode=01',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
-        meta: { title: '托管组邮件规则管理' },
+        meta: { title: '托管组邮件规则管理', icon: 'form' },
         children: [
           {
-            path: '/list/table-list',
-            // path: '/list/table-list/:groupCode=tg&bizCode=01?',
+            // path: '/list/table-list',
+            path: '/list/table-list/groupCode=tg&bizCode=01',
             name: 'TableListWrapper',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/zjEmail/tgList/TableList'),
+            component: () => import('@/views/zjEmail/tgList/TGTableList'),
             meta: { title: '交易文件规则', keepAlive: true, permission: ['table'] }
           },
           {
-            path: '/list/basic-list?groupCode=tg&bizCode=02',
+            path: '/list/basic-list/groupCode=tg&bizCode=02',
             name: 'BasicList',
-            component: () => import('@/views/zjEmail/tgList/BasicList'),
+            component: () => import('@/views/zjEmail/tgList/TGBasicList'),
             // component: () => import('@/views/list/TableList'),
             meta: { title: '对账单文件规则', keepAlive: true, permission: ['table'] }
           }
         ]
       },
       {
-        path: '/list',
+        path: '/wbList',
         name: 'wbList',
         component: RouteView,
         redirect: '/list/table-list',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
-        meta: { title: '外包交易文件规则' },
+        meta: { title: '外包交易文件规则', icon: 'form' },
         children: [
           {
-            path: '/list/table-list/:groupCode=wb&bizCode=01?',
+            path: '/list/table-list/groupCode=wb&bizCode=01?',
             name: 'TableListWrapperBizCode01',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/zjEmail/wbList/TableList'),
+            component: () => import('@/views/zjEmail/wbList/WBTableList'),
             meta: { title: '外包对账单文件规则', keepAlive: true, permission: ['table'] }
           },
           {
-            path: '/list/basic-list/:groupCode=wb&bizCode=02?',
+            path: '/list/basic-list/groupCode=wb&bizCode=02?',
             name: 'BasicListBizCode02',
-            component: () => import('@/views/zjEmail/wbList/BasicList'),
+            component: () => import('@/views/zjEmail/wbList/WBBasicList'),
             // component: () => import('@/views/list/TableList'),
             meta: { title: '重复交易文件/对账单', keepAlive: true, permission: ['table'] }
           }
         ]
       },
       {
-        path: '/list',
+        path: '/ywglList',
         name: 'ywglList',
         component: RouteView,
         redirect: '/list/table-list',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
-        meta: { title: '业务规制管理' },
+        meta: { title: '业务规制管理', icon: 'form' },
         children: [
           {
-            path: '/list/table-list/:ywgl=ywgl?',
+            path: '/list/table-list/ywgl=ywgl?',
             name: 'TableListWrapperYwgl',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/zjEmail/ywglList/YWGLTableList'),
@@ -140,22 +141,22 @@ export const asyncRouterMap = [
         ]
       },
       {
-        path: '/list',
+        path: '/yjglList',
         name: 'yjglList',
         component: RouteView,
         redirect: '/list/table-list',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
-        meta: { title: '邮件管理' },
+        meta: { title: '邮件管理', icon: 'form' },
         children: [
           {
-            path: '/list/table-list/:yjgl=yxgl?',
+            path: '/list/table-list/yjgl=yxgl?',
             name: 'TableListWrapperYjgl',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/zjEmail/yjglList/YjglTableList'),
             meta: { title: '邮箱管理', keepAlive: true, permission: ['table'] }
           },
           {
-            path: '/list/basic-list/:yjgl=yxbdyw?',
+            path: '/list/basic-list/yjgl=yxbdyw?',
             name: 'BasicListYjgl',
             component: () => import('@/views/zjEmail/yjglList/YjglBasicList'),
             // component: () => import('@/views/list/TableList'),

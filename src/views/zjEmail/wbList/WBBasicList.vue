@@ -5,48 +5,14 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
-              <a-form-item label="邮箱账号">
-                <a-select
-                  v-model="accountTemp"
-                  placeholder="请选择"
-                  default-value="0"
-                  :default-active-first-option="false"
-                  :show-arrow="true"
-                  :filter-option="true"
-                  :not-found-content="null"
-                  :label-in-value="true"
-                  @search="handleSearch"
-                  @change="handleChange" >
-                  <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
-                  <a-select-option
-                    v-for="(item,index) in dealerData"
-                    :key="item.id + index"
-                    :value="item.account">
-                    {{ item.account }}
-                  </a-select-option>
-                </a-select>
-                <!-- <a-select
-                  show-search
-                  :value="value"
-                  placeholder="input search text"
-                  style="width: 200px"
-                  :default-active-first-option="false"
-                  :show-arrow="false"
-                  :filter-option="false"
-                  :not-found-content="null"
-                  @search="handleSearch"
-                  @change="handleChange"
-                >
-                  <a-select-option v-for="d in data" :key="d.value">
-                    {{ d.text }}
-                  </a-select-option>
-                </a-select> -->
+              <a-form-item label="业务日期">
+                <a-range-picker @change="onChange" />
               </a-form-item>
             </a-col>
             <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, accountTemp='')">重置</a-button>
+                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, dealerNameTemp='')">重置</a-button>
                 <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
                   <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -58,7 +24,7 @@
       </div>
 
       <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <!-- <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button> -->
         <!-- <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -73,7 +39,7 @@
       <s-table
         ref="table"
         size="default"
-        :rowKey="(record) => record.account + record.id + record.emailAccountId"
+        :rowKey="(record) => record.faccountCode + record.id + record.valBatchName"
         :columns="columns"
         :data="loadData"
         :alert="false"
@@ -101,7 +67,7 @@
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">修改</a>
+            <a @click="handleEdit(record)">查看</a>
             <!-- <a-divider type="vertical" />
             <a @click="handleSub(record)">删除</a> -->
           </template>
@@ -123,15 +89,12 @@
 
 <script>
 import {
-  queryEmailAccountBizInfo,
-  queryEmailAccountBizById,
-  saveEmailAccountBiz,
-  updateStatus
-  // queryGroupInfo,  // 查询所有的业务组编码信息
-  // queryBizCodeInfo // 查询所有的业务信息
-  // updateEmailPushFlg // TODO 是否推送
-  } from '@/api/zjApis/emailManage/emailBiz'
-import { queryEmailAccountInfo } from '@/api/zjApis/emailManage/index'
+  queryDealerInfo,
+  queryEmailRuleInfo,
+  // queryEmailRuleById,
+  updateEmailRuleStatus,
+  saveEmailRuleAndValuationTime
+  } from '@/api/zjApis/tgemailRuleConfig/dealFileRule'
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'
@@ -145,16 +108,40 @@ const columns = [
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '邮箱账号',
-    dataIndex: 'account'
+    title: '重复邮件详情',
+    dataIndex: 'faccountCode'
   },
   {
-    title: '业务名称',
-    dataIndex: 'bizName'
+    title: '账套号',
+    dataIndex: 'fundCode'
   },
   {
-    title: '收发标志',
-    dataIndex: 'xferFlgName'
+    title: '基金代码',
+    dataIndex: 'productName'
+  },
+  {
+    title: '产品名称',
+    dataIndex: 'valBatchName'
+  },
+  {
+    title: '估值时效',
+    dataIndex: 'dealerName'
+  },
+  {
+    title: '券商\\期货商',
+    dataIndex: 'valBatchName1'
+  },
+  {
+    title: '标题',
+    dataIndex: 'valBatchName2'
+  },
+  {
+    title: '发件人',
+    dataIndex: 'senders'
+  },
+  {
+    title: '附件个数',
+    dataIndex: 'attachCount'
   },
   // {
   //   title: '启用',
@@ -199,7 +186,7 @@ export default {
     this.columns = columns
     return {
       recordId: '',
-      accountTemp: '',
+      dealerNameTemp: '',
       dealerData: [], // 券商/期货商list
       emailRuleList: [], // 规则列表
       value: undefined, // 可以替换
@@ -215,7 +202,7 @@ export default {
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         console.log('loadData 请求参数>:', requestParameters)
-        return queryEmailAccountBizInfo(requestParameters)
+        return queryEmailRuleInfo(requestParameters)
           .then(res => {
           this.localLoading = false
             console.log('>queryEmailRuleInfo>成功>:', res)
@@ -253,13 +240,16 @@ export default {
     }
   },
   methods: {
+    onChange (date, dateString) {
+      console.log(date, dateString);
+    },
     handleOnChange (statusChange, record) {
       this.recordId = record.id
       console.log('>status>>:', statusChange)
       console.log('>record>>:', record.id)
       const status = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
       const id = record.id // 此条id
-      updateStatus({ id, status }).then(res => {
+      updateEmailRuleStatus({ id, status }).then(res => {
         this.recordId = null
         console.log(status ? '>启用成功>>:' : '>禁用成功>>:', res)
         this.loadData()
@@ -269,7 +259,7 @@ export default {
       })
     },
     init () {
-      queryEmailAccountInfo({}).then(res => {
+      queryDealerInfo().then(res => {
         console.log('>res>>:', res)
         this.dealerData = res.dataValue
       }).catch(err => {
@@ -284,22 +274,23 @@ export default {
       // })
     },
     handleSearch (value) { // TODO ?待接口
-      console.log('>邮箱绑定业务--11----->:', value)
+      console.log('>serach--11----->:', value)
       // fetch(value, data => (this.data = data))
-      // const cloneData = JSON.parse(JSON.stringify(this.dealerData))
-      // value && (this.dealerData = cloneData.map((item, index) => {
-      //   if (item.account?.indexOf(value) > -1) {
-      //     console.log('>匹配查到了>>:', item)
-      //     return item
-      //   } else {
-      //     // console.log('>没有匹配到>>:', item.dealerName)
-      //   }
-      // }))
+      const cloneData = JSON.parse(JSON.stringify(this.dealerData))
+      value && (this.dealerData = cloneData.map((item, index) => {
+        if (item.dealerName?.indexOf(value) > -1) {
+          console.log('>匹配查到了>>:', item)
+          return item
+        } else {
+          // console.log('>没有匹配到>>:', item.dealerName)
+        }
+      }))
     },
-    handleChange (value) { // 确认用name不用code
-      console.log('邮箱绑定业务', value)
+    handleChange (value, aa) { // 确认用name不用code
+      console.log('change11', value)
+      // console.log('change22', aa)
       // this.queryParam.dealerCode = value?.key
-      this.queryParam.account = value?.key
+      this.queryParam.dealerName = value?.key
     },
     handleAdd () {
       this.mdl = null
@@ -308,15 +299,15 @@ export default {
     handleEdit (record) {
       console.log('>xiugai 修改>>:', record)
       this.mdl = { ...record }
-      queryEmailAccountBizById({ id: record.id }).then(res => {
-        // console.log('>queryEmailAccountBizById>修改id>:', res)
-        if (res.status === 1) {
-          // this.mdl = res.dataValue
-          this.visible = true
-        }
-      }).catch(err => {
-        console.log('>queryEmailAccountBizById>异常列表 by id >:', err)
-      })
+      this.visible = true
+      // queryEmailRuleById({ id: record.id }).then(res => {
+      //   // console.log('>queryEmailRuleById>修改id>:', res)
+      //   if (res.status === 1) {
+      //     // this.mdl = res.dataValue
+      //   }
+      // }).catch(err => {
+      //   console.log('>queryEmailRuleById>异常列表 by id >:', err)
+      // })
     },
     handleOk (modal) {
       console.log('>modal>子组件发射来的值>:', modal)
@@ -344,7 +335,7 @@ export default {
           } else {
             // 新增
             modal?.id && (values.id = modal?.id)
-            saveEmailAccountBiz(values).then(res => {
+            saveEmailRuleAndValuationTime(values).then(res => {
               console.log('>新增>>:', res)
               this.visible = false
               this.confirmLoading = false

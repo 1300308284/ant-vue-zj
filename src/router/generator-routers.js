@@ -24,8 +24,10 @@ const constantRouterComponents = {
   AdvanceForm: () => import('@/views/form/advancedForm/AdvancedForm'),
 
   // list
-  TableList: () => import('@/views/list/TableList'),
-  StandardList: () => import('@/views/list/BasicList'),
+  // TableList: () => import('@/views/list/TableList'),
+  TableList: () => import('@/views/zjEmail/tgList/TGTableList'),
+  // StandardList: () => import('@/views/list/BasicList'),
+  StandardList: () => import('@/views/zjEmail/tgList/TGBasicList'),
   CardList: () => import('@/views/list/CardList'),
   SearchLayout: () => import('@/views/list/search/SearchLayout'),
   SearchArticles: () => import('@/views/list/search/Article'),
@@ -81,11 +83,13 @@ const rootRouter = {
  * @returns {Promise<Router>}
  */
 export const generatorDynamicRouter = token => {
+  debugger
   return new Promise((resolve, reject) => {
     loginService
       .getCurrentUserNav(token)
       .then(res => {
         console.log('generatorDynamicRouter response:', res)
+        debugger
         const { result } = res
         const menuNav = []
         const childrenNav = []

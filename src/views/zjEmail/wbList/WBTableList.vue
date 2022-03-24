@@ -5,13 +5,19 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
-              <a-form-item label="邮箱账号">
+              <a-form-item label="业务日期">
+                <a-input v-model.trim="queryParam.faccountCode" placeholder="请输入账套号"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item label="券商\期货商">
                 <a-select
-                  v-model="accountTemp"
+                  show-search
+                  v-model="dealerNameTemp"
                   placeholder="请选择"
                   default-value="0"
                   :default-active-first-option="false"
-                  :show-arrow="true"
+                  :show-arrow="false"
                   :filter-option="true"
                   :not-found-content="null"
                   :label-in-value="true"
@@ -20,9 +26,9 @@
                   <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
                   <a-select-option
                     v-for="(item,index) in dealerData"
-                    :key="item.id + index"
-                    :value="item.account">
-                    {{ item.account }}
+                    :key="item.dealerCode + index"
+                    :value="item.dealerName">
+                    {{ item.dealerName }}
                   </a-select-option>
                 </a-select>
                 <!-- <a-select
@@ -43,10 +49,45 @@
                 </a-select> -->
               </a-form-item>
             </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item label="产品名称">
+                <a-input v-model.trim="queryParam.productName" placeholder="请输入产品名称" style="width: 100%"/>
+              </a-form-item>
+            </a-col>
+            <!-- <template v-if="advanced">
+              <a-col :md="8" :sm="24">
+                <a-form-item label="产品名称">
+                  <a-input v-model="queryParam.callNo" style="width: 100%"/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="更新日期">
+                  <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="使用状态">
+                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
+                    <a-select-option value="0">全部</a-select-option>
+                    <a-select-option value="1">关闭</a-select-option>
+                    <a-select-option value="2">运行中</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="使用状态">
+                  <a-select placeholder="请选择" default-value="0">
+                    <a-select-option value="0">全部</a-select-option>
+                    <a-select-option value="1">关闭</a-select-option>
+                    <a-select-option value="2">运行中</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </template> -->
             <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, accountTemp='')">重置</a-button>
+                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, dealerNameTemp='')">重置</a-button>
                 <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
                   <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -73,7 +114,7 @@
       <s-table
         ref="table"
         size="default"
-        :rowKey="(record) => record.account + record.id + record.emailAccountId"
+        :rowKey="(record) => record.faccountCode + record.id + record.valBatchName"
         :columns="columns"
         :data="loadData"
         :alert="false"
@@ -123,15 +164,12 @@
 
 <script>
 import {
-  queryEmailAccountBizInfo,
-  queryEmailAccountBizById,
-  saveEmailAccountBiz,
-  updateStatus
-  // queryGroupInfo,  // 查询所有的业务组编码信息
-  // queryBizCodeInfo // 查询所有的业务信息
-  // updateEmailPushFlg // TODO 是否推送
-  } from '@/api/zjApis/emailManage/emailBiz'
-import { queryEmailAccountInfo } from '@/api/zjApis/emailManage/index'
+  queryDealerInfo,
+  queryEmailRuleInfo,
+  queryEmailRuleById,
+  updateEmailRuleStatus,
+  saveEmailRuleAndValuationTime
+  } from '@/api/zjApis/tgemailRuleConfig/dealFileRule'
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'
@@ -145,20 +183,66 @@ const columns = [
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '邮箱账号',
-    dataIndex: 'account'
+    title: '账套号',
+    dataIndex: 'faccountCode'
   },
   {
-    title: '业务名称',
-    dataIndex: 'bizName'
+    title: '基金代码',
+    dataIndex: 'fundCode'
   },
   {
-    title: '收发标志',
-    dataIndex: 'xferFlgName'
+    title: '产品名称',
+    dataIndex: 'productName'
+  },
+  {
+    title: '估值批次',
+    dataIndex: 'valBatchName'
+  },
+  {
+    title: '券商\\期货商',
+    dataIndex: 'dealerName'
+  },
+  {
+    title: '标题',
+    dataIndex: 'title'
+  },
+  {
+    title: '发件人',
+    dataIndex: 'senders'
+  },
+  {
+    title: '附件个数',
+    dataIndex: 'attachCount'
+  },
+  {
+    title: '启用',
+    scopedSlots: { customRender: 'status' }
   },
   // {
-  //   title: '启用',
+  //   title: '密码文件名',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   title: '描述',
+  //   dataIndex: 'description',
+  //   scopedSlots: { customRender: 'description' }
+  // },
+  // {
+  //   title: '服务调用次数',
+  //   dataIndex: 'callNo',
+  //   sorter: true,
+  //   needTotal: true,
+  //   customRender: (text) => text + ' 次'
+  // },
+  // {
+  //   title: '状态',
+  //   dataIndex: 'status',
   //   scopedSlots: { customRender: 'status' }
+  // },
+  // {
+  //   title: '更新时间',
+  //   dataIndex: 'updatedAt',
+  //   sorter: true
   // },
   {
     title: '操作',
@@ -199,7 +283,7 @@ export default {
     this.columns = columns
     return {
       recordId: '',
-      accountTemp: '',
+      dealerNameTemp: '',
       dealerData: [], // 券商/期货商list
       emailRuleList: [], // 规则列表
       value: undefined, // 可以替换
@@ -215,7 +299,7 @@ export default {
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         console.log('loadData 请求参数>:', requestParameters)
-        return queryEmailAccountBizInfo(requestParameters)
+        return queryEmailRuleInfo(requestParameters)
           .then(res => {
           this.localLoading = false
             console.log('>queryEmailRuleInfo>成功>:', res)
@@ -259,7 +343,7 @@ export default {
       console.log('>record>>:', record.id)
       const status = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
       const id = record.id // 此条id
-      updateStatus({ id, status }).then(res => {
+      updateEmailRuleStatus({ id, status }).then(res => {
         this.recordId = null
         console.log(status ? '>启用成功>>:' : '>禁用成功>>:', res)
         this.loadData()
@@ -269,7 +353,7 @@ export default {
       })
     },
     init () {
-      queryEmailAccountInfo({}).then(res => {
+      queryDealerInfo().then(res => {
         console.log('>res>>:', res)
         this.dealerData = res.dataValue
       }).catch(err => {
@@ -284,22 +368,23 @@ export default {
       // })
     },
     handleSearch (value) { // TODO ?待接口
-      console.log('>邮箱绑定业务--11----->:', value)
+      console.log('>serach--11----->:', value)
       // fetch(value, data => (this.data = data))
-      // const cloneData = JSON.parse(JSON.stringify(this.dealerData))
-      // value && (this.dealerData = cloneData.map((item, index) => {
-      //   if (item.account?.indexOf(value) > -1) {
-      //     console.log('>匹配查到了>>:', item)
-      //     return item
-      //   } else {
-      //     // console.log('>没有匹配到>>:', item.dealerName)
-      //   }
-      // }))
+      const cloneData = JSON.parse(JSON.stringify(this.dealerData))
+      value && (this.dealerData = cloneData.map((item, index) => {
+        if (item.dealerName?.indexOf(value) > -1) {
+          console.log('>匹配查到了>>:', item)
+          return item
+        } else {
+          // console.log('>没有匹配到>>:', item.dealerName)
+        }
+      }))
     },
-    handleChange (value) { // 确认用name不用code
-      console.log('邮箱绑定业务', value)
+    handleChange (value, aa) { // 确认用name不用code
+      console.log('change11', value)
+      // console.log('change22', aa)
       // this.queryParam.dealerCode = value?.key
-      this.queryParam.account = value?.key
+      this.queryParam.dealerName = value?.key
     },
     handleAdd () {
       this.mdl = null
@@ -308,14 +393,14 @@ export default {
     handleEdit (record) {
       console.log('>xiugai 修改>>:', record)
       this.mdl = { ...record }
-      queryEmailAccountBizById({ id: record.id }).then(res => {
-        // console.log('>queryEmailAccountBizById>修改id>:', res)
+      queryEmailRuleById({ id: record.id }).then(res => {
+        // console.log('>queryEmailRuleById>修改id>:', res)
         if (res.status === 1) {
           // this.mdl = res.dataValue
           this.visible = true
         }
       }).catch(err => {
-        console.log('>queryEmailAccountBizById>异常列表 by id >:', err)
+        console.log('>queryEmailRuleById>异常列表 by id >:', err)
       })
     },
     handleOk (modal) {
@@ -344,7 +429,7 @@ export default {
           } else {
             // 新增
             modal?.id && (values.id = modal?.id)
-            saveEmailAccountBiz(values).then(res => {
+            saveEmailRuleAndValuationTime(values).then(res => {
               console.log('>新增>>:', res)
               this.visible = false
               this.confirmLoading = false

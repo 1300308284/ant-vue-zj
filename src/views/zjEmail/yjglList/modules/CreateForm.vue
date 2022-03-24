@@ -1,7 +1,7 @@
 <template>
   <a-modal
-    :title="model && model.id > 0 ? '修改邮箱' : '新建邮箱'"
-    :width="'calc(100vw - 700px)'"
+    :title="model && model.id > 0 ? '修改邮箱绑定业务' : '新建邮箱绑定业务'"
+    :width="'calc(100vw - 500px)'"
     :visible="visible"
     :confirmLoading="loading"
     @ok="() => { $emit('ok', model) }"
@@ -12,53 +12,92 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="邮箱账号">
-              <a-input v-decorator.trim="['account']" @change="handleFaccountCodeChange"/>
+              <!-- <a-input v-decorator.trim="['account']" @change="handleFaccountCodeChange"/> -->
+              <a-select
+                show-search
+                v-decorator.trim="['emailAccountId', {rules: [{required: true, message: '请选择'}]}]"
+                placeholder="请选择"
+                default-value="0"
+                :default-active-first-option="false"
+                :show-arrow="false"
+                :filter-option="false"
+                :not-found-content="null"
+                :label-in-value="false"
+                @search="handleSearch"
+                @change="handleChange" >
+                <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
+                <a-select-option
+                  v-for="(item,index) in dealerData"
+                  :key="item.id + index"
+                  :value="item.id">
+                  {{ item.account }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
-            <a-form-item label="邮箱密码">
-              <a-input :disabled="false" v-decorator.trim="['pwd']" />
+            <a-form-item label="业务编号">
+              <!-- <a-input :disabled="false" type="pwd" v-decorator.trim="['bizCode', {rules: [{required: true, min: 3, message: '请选择'}]}]" /> -->
+              <a-select
+                show-search
+                v-decorator.trim="['groupCode', {rules: [{required: true, message: '请选择'}]}]"
+                placeholder="请选择"
+                default-value="0"
+                :default-active-first-option="false"
+                :show-arrow="false"
+                :filter-option="false"
+                :not-found-content="null"
+                :label-in-value="false"
+                @search="handleSearch"
+                @change="handleChange" >
+                <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
+                <a-select-option
+                  v-for="(item,index) in codeData"
+                  :key="item.groupCode + index"
+                  :value="item.groupCode">
+                  {{ item.groupName }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
         </a-row>
 
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
-            <a-form-item label="邮箱服务器">
-              <a-input :disabled="false" v-decorator.trim="['emailServer']" />
+            <a-form-item label="业务名称">
+              <!-- <a-input :disabled="false" v-decorator.trim="['bizName', {rules: [{required: true, min: 3, message: '请选择'}]}]" /> -->
+              <a-select
+                show-search
+                v-decorator.trim="['bizCode', {rules: [{required: true, message: '请选择'}]}]"
+                placeholder="请选择"
+                default-value="0"
+                :default-active-first-option="false"
+                :show-arrow="false"
+                :filter-option="false"
+                :not-found-content="null"
+                :label-in-value="false"
+                @search="handleSearch"
+                @change="handleChange" >
+                <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
+                <a-select-option
+                  v-for="(item,index) in ywNameData"
+                  :key="item.bizCode + index"
+                  :value="item.bizCode">
+                  {{ item.bizName }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
-            <a-form-item label="附件存储根路径">
-              <a-input :disabled="false" v-decorator.trim="['attachRootPath', {rules: [{required: true, min: 3, message: '请按格式T+0填写'}]}]" />
+            <a-form-item label="收发标志">
+              <!-- <a-input :disabled="true" v-decorator.trim="['xferFlg', {rules: [{required: false, min: 3, message: '请按格式T+0填写'}]}]" /> -->
+              <a-radio-group @change="onChange" v-decorator.trim="['xferFlg']">
+                <a-radio :value="'01'">收邮件</a-radio>
+                <a-radio :value="'10'">发邮件用</a-radio>
+                <a-radio :value="'11'">收发邮件</a-radio>
+              </a-radio-group>
             </a-form-item>
           </a-col>
-        </a-row>
-
-        <a-row :gutter="48">
-          <a-col :md="12" :sm="24">
-            <a-form-item label="邮件推送">
-              <a-input :disabled="true" v-decorator.trim="['pushFlg']" />
-            </a-form-item>
-          </a-col>
-          <a-col :md="12" :sm="24">
-            <a-form-item label="推送地址">
-              <a-input v-decorator.trim="['pushUrls']" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-
-        <a-row :gutter="48">
-          <a-col :md="12" :sm="24">
-            <a-form-item label="描述">
-              <a-input v-decorator.trim="['comments']" />
-            </a-form-item>
-          </a-col>
-          <!-- <a-col :md="12" :sm="24">
-            <a-form-item label="附件个数">
-              <a-input v-decorator.trim="['attachCount', { rules: [{type: 'string'}]}]" />
-            </a-form-item>
-          </a-col> -->
         </a-row>
         <!-- <a-row>
           <a-col>
@@ -80,20 +119,25 @@
 <script>
 import pick from 'lodash.pick'
 import debounce from 'lodash.debounce'
+import { queryEmailAccountInfo } from '@/api/zjApis/emailManage/index'
+import {
+  queryGroupInfo, // 查询所有的业务组编码信息
+  queryBizCodeInfo // 查询所有的业务信息
+  } from '@/api/zjApis/emailManage/emailBiz'
 
 // 表单字段
 const fields = [
   'account',
-  'attachRootPath',
-  'comments',
-  'emailName',
-  'emailServer',
+  'attachSubPath',
+  'bizCode',
+  'bizName',
+  'emailAccountId',
+  'groupCode',
+  'groupName',
   'id',
   'logTime',
-  'pushFlg',
-  'pushUrls',
-  'pwd',
-  'status'
+  'status',
+  'xferFlg'
 ]
 
 export default {
@@ -123,6 +167,12 @@ export default {
       }
     }
     return {
+      queryParam: {},
+      value: 1,
+      accountTemp: '',
+      dealerData: [],
+      codeData: [],
+      ywNameData: [],
       form: this.$form.createForm(this)
     }
   },
@@ -136,8 +186,56 @@ export default {
     this.$watch('model', () => {
       this.model && this.form.setFieldsValue(pick(this.model, fields))
     })
+    this.init()
   },
   methods: {
+    init () {
+      queryEmailAccountInfo({}).then(res => {
+        console.log('>res>>:', res)
+        this.dealerData = res.dataValue
+      }).catch(err => {
+        console.log('>err>>:', err)
+      })
+
+      // 查询所有的业务组编码信息 业务编号
+      queryGroupInfo({}).then(res => {
+        console.log('>res查询所有的业务组编码信息 业务编号>>:', res)
+        this.codeData = res.dataValue
+      }).catch(err => {
+        console.log('>err>>:', err)
+      })
+
+      // 查询所有的业务信息 业务名称
+      queryBizCodeInfo({}).then(res => {
+        console.log('>res>查询所有的业务信息 业务名称>:', res)
+        this.ywNameData = res.dataValue
+      }).catch(err => {
+        console.log('>err>>:', err)
+      })
+    },
+    onChange (e) {
+      console.log('radio checked11111', e.target.value);
+      this.queryParam.xferFlg = e.target?.value
+    },
+    handleSearch (value) { // TODO ?待接口
+      console.log('>邮箱绑定业务--11----->:', value)
+      // fetch(value, data => (this.data = data))
+      // const cloneData = JSON.parse(JSON.stringify(this.dealerData))
+      // value && (this.dealerData = cloneData.map((item, index) => {
+      //   if (item.dealerName?.indexOf(value) > -1) {
+      //     console.log('>匹配查到了>>:', item)
+      //     return item
+      //   } else {
+      //     // console.log('>没有匹配到>>:', item.dealerName)
+      //   }
+      // }))
+    },
+    handleChange (value, aa) { // 确认用name不用code
+      console.log('邮箱绑定业务', value)
+      // console.log('change22', aa)
+      // this.queryParam.dealerCode = value?.key
+      // this.queryParam.account = value?.key
+    },
     handleOnChange (checked) {
       console.log(`a-switch to ${checked}`);
     },

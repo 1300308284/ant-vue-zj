@@ -4,20 +4,20 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="6" :sm="24">
-              <a-form-item label="账套号">
+            <!-- <a-col :md="6" :sm="24">
+              <a-form-item label="估值批次">
                 <a-input v-model.trim="queryParam.faccountCode" placeholder="请输入账套号"/>
               </a-form-item>
-            </a-col>
+            </a-col> -->
             <a-col :md="6" :sm="24">
-              <a-form-item label="券商\期货商">
+              <a-form-item label="估值批次">
                 <a-select
                   show-search
-                  v-model="dealerNameTemp"
+                  v-decorator.trim="['valBatchName']"
                   placeholder="请选择"
                   default-value="0"
                   :default-active-first-option="false"
-                  :show-arrow="false"
+                  :show-arrow="true"
                   :filter-option="true"
                   :not-found-content="null"
                   :label-in-value="true"
@@ -25,7 +25,7 @@
                   @change="handleChange" >
                   <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
                   <a-select-option
-                    v-for="(item,index) in dealerData"
+                    v-for="(item,index) in valBatchNameData"
                     :key="item.dealerCode + index"
                     :value="item.dealerName">
                     {{ item.dealerName }}
@@ -49,41 +49,6 @@
                 </a-select> -->
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item label="产品名称">
-                <a-input v-model.trim="queryParam.productName" placeholder="请输入产品名称" style="width: 100%"/>
-              </a-form-item>
-            </a-col>
-            <!-- <template v-if="advanced">
-              <a-col :md="8" :sm="24">
-                <a-form-item label="产品名称">
-                  <a-input v-model="queryParam.callNo" style="width: 100%"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="更新日期">
-                  <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-            </template> -->
             <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
@@ -164,12 +129,10 @@
 
 <script>
 import {
-  queryDealerInfo,
-  queryEmailRuleInfo,
-  queryEmailRuleById,
-  updateEmailRuleStatus,
-  saveEmailRuleAndValuationTime
-  } from '@/api/zjApis/emailRuleConfig/dealFileRule'
+  queryValuationTimeInfo, // 查询所有的估值批次
+  queryValuationTimeById, // 修改的回显查询(根据id查询)
+  saveValuationTime
+  } from '@/api/zjApis/valuationTimeInfo/index'
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'
@@ -183,66 +146,24 @@ const columns = [
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '账套号',
-    dataIndex: 'faccountCode'
-  },
-  {
-    title: '基金代码',
-    dataIndex: 'fundCode'
-  },
-  {
-    title: '产品名称',
-    dataIndex: 'productName'
-  },
-  {
     title: '估值批次',
     dataIndex: 'valBatchName'
   },
   {
-    title: '券商\\期货商',
-    dataIndex: 'dealerName'
+    title: '业务日期',
+    dataIndex: 'notifyDate'
   },
   {
-    title: '标题',
-    dataIndex: 'title'
+    title: '数据准备时间',
+    dataIndex: 'notifyTime'
   },
   {
-    title: '发件人',
+    title: '收件人',
     dataIndex: 'senders'
   },
-  {
-    title: '附件个数',
-    dataIndex: 'attachCount'
-  },
-  {
-    title: '启用',
-    scopedSlots: { customRender: 'status' }
-  },
   // {
-  //   title: '密码文件名',
-  //   dataIndex: 'no'
-  // },
-  // {
-  //   title: '描述',
-  //   dataIndex: 'description',
-  //   scopedSlots: { customRender: 'description' }
-  // },
-  // {
-  //   title: '服务调用次数',
-  //   dataIndex: 'callNo',
-  //   sorter: true,
-  //   needTotal: true,
-  //   customRender: (text) => text + ' 次'
-  // },
-  // {
-  //   title: '状态',
-  //   dataIndex: 'status',
+  //   title: '启用',
   //   scopedSlots: { customRender: 'status' }
-  // },
-  // {
-  //   title: '更新时间',
-  //   dataIndex: 'updatedAt',
-  //   sorter: true
   // },
   {
     title: '操作',
@@ -284,7 +205,7 @@ export default {
     return {
       recordId: '',
       dealerNameTemp: '',
-      dealerData: [], // 券商/期货商list
+      valBatchNameData: [], // 券商/期货商list
       emailRuleList: [], // 规则列表
       value: undefined, // 可以替换
       // create model
@@ -299,14 +220,14 @@ export default {
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         console.log('loadData 请求参数>:', requestParameters)
-        return queryEmailRuleInfo(requestParameters)
+        return queryValuationTimeInfo(requestParameters)
           .then(res => {
           this.localLoading = false
-            console.log('>queryEmailRuleInfo>成功>:', res)
+            console.log('>queryValuationTimeInfo>成功>:', res)
             return res.dataValue
           }).catch(err => {
           this.localLoading = false
-            console.log('queryEmailRuleInfo 请求失败>err>>:', err)
+            console.log('queryValuationTimeInfo 请求失败>err>>:', err)
           })
       },
       selectedRowKeys: [],
@@ -338,27 +259,27 @@ export default {
   },
   methods: {
     handleOnChange (statusChange, record) {
-      this.recordId = record.id
-      console.log('>status>>:', statusChange)
-      console.log('>record>>:', record.id)
-      const status = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
-      const id = record.id // 此条id
-      updateEmailRuleStatus({ id, status }).then(res => {
-        this.recordId = null
-        console.log(status ? '>启用成功>>:' : '>禁用成功>>:', res)
-        this.loadData()
-      }).catch(err => {
-        this.recordId = null
-        console.log('>启用失败>>:', err)
-      })
+      // this.recordId = record.id
+      // console.log('>status>>:', statusChange)
+      // console.log('>record>>:', record.id)
+      // const status = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
+      // const id = record.id // 此条id
+      // updateEmailRuleStatus({ id, status }).then(res => {
+      //   this.recordId = null
+      //   console.log(status ? '>启用成功>>:' : '>禁用成功>>:', res)
+      //   this.loadData()
+      // }).catch(err => {
+      //   this.recordId = null
+      //   console.log('>启用失败>>:', err)
+      // })
     },
     init () {
-      queryDealerInfo().then(res => {
-        console.log('>res>>:', res)
-        this.dealerData = res.dataValue
-      }).catch(err => {
-        console.log('>err>>:', err)
-      })
+      // queryValuationTimeInfo({}).then(res => {
+      //   console.log('>res>>:', res)
+      //   this.valBatchNameData = res.dataValue
+      // }).catch(err => {
+      //   console.log('>err>>:', err)
+      // })
 
       // queryEmailRuleInfo(this.queryParam).then(res => {
       //   console.log('>res>>:', res)
@@ -370,15 +291,15 @@ export default {
     handleSearch (value) { // TODO ?待接口
       console.log('>serach--11----->:', value)
       // fetch(value, data => (this.data = data))
-      const cloneData = JSON.parse(JSON.stringify(this.dealerData))
-      value && (this.dealerData = cloneData.map((item, index) => {
-        if (item.dealerName?.indexOf(value) > -1) {
-          console.log('>匹配查到了>>:', item)
-          return item
-        } else {
-          // console.log('>没有匹配到>>:', item.dealerName)
-        }
-      }))
+      // const cloneData = JSON.parse(JSON.stringify(this.valBatchNameData))
+      // value && (this.valBatchNameData = cloneData.map((item, index) => {
+      //   if (item.dealerName?.indexOf(value) > -1) {
+      //     console.log('>匹配查到了>>:', item)
+      //     return item
+      //   } else {
+      //     // console.log('>没有匹配到>>:', item.dealerName)
+      //   }
+      // }))
     },
     handleChange (value, aa) { // 确认用name不用code
       console.log('change11', value)
@@ -393,14 +314,14 @@ export default {
     handleEdit (record) {
       console.log('>xiugai 修改>>:', record)
       this.mdl = { ...record }
-      queryEmailRuleById({ id: record.id }).then(res => {
-        // console.log('>queryEmailRuleById>修改id>:', res)
+      queryValuationTimeById({ id: record.id }).then(res => {
+        // console.log('>queryValuationTimeById>修改id>:', res)
         if (res.status === 1) {
           // this.mdl = res.dataValue
           this.visible = true
         }
       }).catch(err => {
-        console.log('>queryEmailRuleById>异常列表 by id >:', err)
+        console.log('>queryValuationTimeById>异常列表 by id >:', err)
       })
     },
     handleOk (modal) {
@@ -429,7 +350,7 @@ export default {
           } else {
             // 新增
             modal?.id && (values.id = modal?.id)
-            saveEmailRuleAndValuationTime(values).then(res => {
+            saveValuationTime(values).then(res => {
               console.log('>新增>>:', res)
               this.visible = false
               this.confirmLoading = false

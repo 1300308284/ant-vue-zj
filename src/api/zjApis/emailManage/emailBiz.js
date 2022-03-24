@@ -11,7 +11,7 @@ const baseApi = {
   updateStatus: baseUrl + '/updateStatus' // 修改邮箱绑定业务是否可用状态
 }
 
-export const queryEmailAccountBizInfo = params => request({ url: baseApi.queryEmailAccountBizInfo, method: 'get', params })
+export const queryEmailAccountBizInfo = data => request({ url: baseApi.queryEmailAccountBizInfo, method: 'post', data })
 export const queryEmailAccountBizById = params => request({ url: baseApi.queryEmailAccountBizById, method: 'get', params })
 export const queryGroupInfo = params => request({ url: baseApi.queryGroupInfo, method: 'get', params })
 export const queryBizCodeInfo = params => request({ url: baseApi.queryBizCodeInfo, method: 'get', params })

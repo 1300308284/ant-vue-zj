@@ -10,7 +10,7 @@ const baseApi = {
   updateEmailPushFlg: baseUrl + '/updateEmailPushFlg' // 修改邮箱是否推送成功
 }
 
-export const queryEmailAccountInfo = params => request({ url: baseApi.queryEmailAccountInfo, method: 'get', params })
+export const queryEmailAccountInfo = data => request({ url: baseApi.queryEmailAccountInfo, method: 'post', data })
 export const queryEmailAccountById = params => request({ url: baseApi.queryEmailAccountById, method: 'get', params })
 export const saveEmailAccount = data => request({ url: baseApi.saveEmailAccount, method: 'post', data })
 export const updateEmailStatus = data => request({ url: baseApi.updateEmailStatus, method: 'post', data })

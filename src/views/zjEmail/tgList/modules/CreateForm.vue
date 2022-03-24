@@ -17,7 +17,7 @@
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="基金代码">
-              <a-input :disabled="false" v-decorator.trim="['fundCode']" />
+              <a-input :disabled="true" v-decorator.trim="['fundCode']" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -25,12 +25,12 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="产品名称">
-              <a-input :disabled="false" v-decorator.trim="['productName']" />
+              <a-input :disabled="true" v-decorator.trim="['productName']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="估值批次">
-              <a-input :disabled="false" v-decorator.trim="['valBatchName', {rules: [{required: true, min: 3, message: '请按格式T+0填写'}]}]" />
+              <a-input :disabled="true" v-decorator.trim="['valBatchName', {rules: [{required: true, min: 3, message: '请按格式T+0填写'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -61,27 +61,24 @@
           </a-col>
         </a-row>
         <a-row :gutter="48">
-          <a-col :md="12" :sm="24">
+          <a-col :span="24" :md="12" :sm="24">
             <a-form-item label="密码文件名">
               <a-input v-decorator.trim="['ciperFileName']" />
             </a-form-item>
           </a-col>
+        </a-row>
+        <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="密码">
               <a-input v-decorator.trim="['ciper']" />
             </a-form-item>
           </a-col>
         </a-row>
-        <!-- <a-row :gutter="48">
-          <a-col :md="12" :sm="24">
-            <a-form-item label="是否启用">
-              <a-switch default-checked @change="handleOnChange"/>
-            </a-form-item>
-          </a-col>
-        </a-row> -->
         <a-row>
           <a-col>
-            <h3>规则说明: </h3>
+            <a-divider orientation="center">
+              <h3 style="font-weight: bold; color: red">规则说明: </h3>
+            </a-divider>
             <p>  1、账套号：输入账套号回车后，调用接口获取基金代码、产品名称、、估值批次等信息，自动填入相关字段；</p>
             <p>  2、通知时间：为固定时间点，到指定的时间点，将当前规则的检查结果，邮件通知给相关的人员；</p>
             <p>  3、附件个数为邮件附件中压缩文件个数，压缩类型zip,rar,7z,tar，“对账单文件规则”不显示该元素；</p>

@@ -169,7 +169,7 @@ import {
   queryEmailRuleById,
   updateEmailRuleStatus,
   saveEmailRuleAndValuationTime
-  } from '@/api/zjApis/emailRuleConfig/dealFileRule'
+  } from '@/api/zjApis/tgemailRuleConfig/dealFileRule'
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'
@@ -326,6 +326,7 @@ export default {
     // TODO groupCode;//业务组编码 ----- 必传  所有这个菜单下都需要这个
     // TODO 托管的code：groupCode：tg，外包的code：groupCode：wb；交易的code：bizCode：01，对账单的code：bizCode：02
     // this.queryParam.groupCode = this.$router.query?.groupCode || 'tg'
+    console.log('>路由参数2222>>:', this.$route)
     this.init()
   },
   computed: {

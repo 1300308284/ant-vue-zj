@@ -105,21 +105,21 @@ const vueConfig = {
     port: 8099,
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
-      // '/api': {
-      //   target: 'https://mock.ihx.me/mock/5baf3052f7da7e07e04a5116/antd-pro',
-      //   ws: false,
-      //   changeOrigin: true
-      // }
-      '/emailRule': { // TODO 有接口后再调整
-        // target: 'http://127.0.0.1:8088/', // http://localhost:8088/emailRule/queryDealerInfo
-        target: 'http://172.23.0.137:8088/',
-        changeOrigin: true
-      },
-      '/emailAccount': { // TODO 有接口后再调整
-        // target: 'http://127.0.0.1:8088/', // http://localhost:8088/emailRule/queryDealerInfo
-        target: 'http://172.23.0.137:8088/',
+      '/email': {
+        target: 'http://172.23.0.137:8088/email/',
+        // ws: true,
         changeOrigin: true
       }
+      // '/emailRule': { // TODO 有接口后再调整
+      //   // target: 'http://127.0.0.1:8088/', // http://localhost:8088/emailRule/queryDealerInfo
+      //   target: 'http://172.23.0.137:8088/',
+      //   changeOrigin: true
+      // },
+      // '/emailAccount': { // TODO 有接口后再调整
+      //   // target: 'http://127.0.0.1:8088/', // http://localhost:8088/emailRule/queryDealerInfo
+      //   target: 'http://172.23.0.137:8088/',
+      //   changeOrigin: true
+      // }
     }
   },
 
