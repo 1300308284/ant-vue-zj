@@ -96,6 +96,9 @@
 <script>
 import pick from 'lodash.pick'
 import debounce from 'lodash.debounce'
+import {
+  queryFaccountInfo
+  } from '@/api/zjApis/tgemailRuleConfig/dealFileRule'
 
 // 表单字段
 const fields = [
@@ -124,7 +127,7 @@ export default {
     },
     model: {
       type: Object,
-      default: () => null
+      default: () => {}
     }
   },
   data () {
@@ -151,15 +154,32 @@ export default {
     // 当 model 发生改变时，为表单设置值
     this.$watch('model', () => {
       this.model && this.form.setFieldsValue(pick(this.model, fields))
-    })
+    }, {
+  deep: true
+})
   },
   methods: {
     handleOnChange (checked) {
       console.log(`a-switch to ${checked}`);
     },
     handleFaccountCodeChange: debounce(function (item, val) {
-      // TODO 待此帐套号item.target.value查相关信息
       console.log('>val>账套号:111>:', item.target.value)
+      const faccountCode = item.target.value
+      queryFaccountInfo({ faccountCode }).then(res => {
+        console.log('>res>待此帐套号item.target.value查相关信息>:', res)
+        // TODO 待后端调其他查询接口, 返真实数据
+        // this.model && this.form.setFieldsValue({
+          const timer = setTimeout(_ => {
+              clearTimeout(timer)
+            this.form.setFieldsValue({
+              fundCode: 'fundCode999',
+              productName: '产品名称999',
+              valBatchName: 'T+999'
+            })
+          }, 100)
+      }).catch(err => {
+        console.log('>err>待此帐套号item.target.value查相关信息>:', err)
+      })
     }, 1000)
   }
 }

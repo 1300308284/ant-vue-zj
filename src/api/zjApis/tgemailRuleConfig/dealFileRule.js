@@ -26,7 +26,16 @@ export const queryDealerInfo = params => request({ url: baseApi.queryDealerInfo,
 export const queryEmailRuleById = params => request({ url: baseApi.queryEmailRuleById, method: 'get', params: assignData(params) })
 export const saveEmailRuleAndValuationTime = data => request({ url: baseApi.saveEmailRuleAndValuationTime, method: 'post', data: assignData(data) })
 export const updateEmailRuleStatus = data => request({ url: baseApi.updateEmailRuleStatus, method: 'post', data: assignData(data) })
-export const queryFaccountInfo = params => request({ url: baseApi.queryFaccountInfo, method: 'get', params: assignData(params) })
+// export const queryFaccountInfo = data => request({ url: baseApi.queryFaccountInfo, method: 'post', data: assignData(data) })
+export const queryFaccountInfo = data => new Promise((resolve, reject) => {
+  const resObj = {
+    faccountCode: '99999',
+    fundCode: 'fundCode999',
+    productName: '产品名称999',
+    valBatchName: 'T+999'
+  }
+  resolve(resObj)
+})
 
 // export function login (parameter) {
 //   return request({
