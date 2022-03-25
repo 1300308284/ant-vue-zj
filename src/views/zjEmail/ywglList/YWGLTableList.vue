@@ -11,12 +11,12 @@
             </a-col> -->
             <a-col :md="6" :sm="24">
               <a-form-item label="估值批次">
+                <!-- v-model.trim="queryParam.id" -->
                 <a-select
-                  show-search
-                  v-decorator.trim="['valBatchName']"
                   placeholder="请选择"
                   default-value="0"
                   :default-active-first-option="false"
+                  :allowClear="true"
                   :show-arrow="true"
                   :filter-option="true"
                   :not-found-content="null"
@@ -26,9 +26,9 @@
                   <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
                   <a-select-option
                     v-for="(item,index) in valBatchNameData"
-                    :key="item.dealerCode + index"
-                    :value="item.dealerName">
-                    {{ item.dealerName }}
+                    :key="item.notifyTime + index"
+                    :value="item.id">
+                    {{ item.valBatchName }}
                   </a-select-option>
                 </a-select>
                 <!-- <a-select
@@ -52,7 +52,7 @@
             <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, dealerNameTemp='')">重置</a-button>
+                <!-- <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, dealerNameTemp='')">重置</a-button> -->
                 <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
                   <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -130,7 +130,7 @@
 <script>
 import {
   queryValuationTimeInfo, // 查询所有的估值批次
-  queryValuationTimeById, // 修改的回显查询(根据id查询)
+  // queryValuationTimeById, // 修改的回显查询(根据id查询)
   saveValuationTime
   } from '@/api/zjApis/valuationTimeInfo/index'
 import moment from 'moment'
@@ -278,12 +278,12 @@ export default {
       // })
     },
     init () {
-      // queryValuationTimeInfo({}).then(res => {
-      //   console.log('>res>>:', res)
-      //   this.valBatchNameData = res.dataValue
-      // }).catch(err => {
-      //   console.log('>err>>:', err)
-      // })
+      queryValuationTimeInfo({}).then(res => {
+        console.log('>res>>:', res)
+        this.valBatchNameData = res.dataValue
+      }).catch(err => {
+        console.log('>err>>:', err)
+      })
 
       // queryEmailRuleInfo(this.queryParam).then(res => {
       //   console.log('>res>>:', res)
@@ -309,7 +309,7 @@ export default {
       console.log('change11', value)
       // console.log('change22', aa)
       // this.queryParam.dealerCode = value?.key
-      this.queryParam.dealerName = value?.key
+      this.queryParam.id = value?.key
     },
     handleAdd () {
       this.mdl = null
@@ -317,16 +317,16 @@ export default {
     },
     handleEdit (record) {
       console.log('>xiugai 修改>>:', record)
-      this.mdl = { ...record }
-      queryValuationTimeById({ id: record.id }).then(res => {
-        // console.log('>queryValuationTimeById>修改id>:', res)
-        if (res.status === 1) {
-          // this.mdl = res.dataValue
-          this.visible = true
-        }
-      }).catch(err => {
-        console.log('>queryValuationTimeById>异常列表 by id >:', err)
-      })
+      this.mdl = record
+      this.visible = true
+      // queryValuationTimeById({ id: record.id }).then(res => {
+      //   // console.log('>queryValuationTimeById>修改id>:', res)
+      //   if (res.status === 1) {
+      //     // this.mdl = res.dataValue
+      //   }
+      // }).catch(err => {
+      //   console.log('>queryValuationTimeById>异常列表 by id >:', err)
+      // })
     },
     handleOk (modal) {
       console.log('>modal>子组件发射来的值>:', modal)

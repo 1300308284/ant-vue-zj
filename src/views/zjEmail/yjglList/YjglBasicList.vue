@@ -6,8 +6,8 @@
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
               <a-form-item label="邮箱账号">
+                <!-- v-model="accountTemp" -->
                 <a-select
-                  v-model="accountTemp"
                   placeholder="请选择"
                   default-value="0"
                   :default-active-first-option="false"
@@ -46,7 +46,7 @@
             <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, accountTemp='')">重置</a-button>
+                <!-- <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, accountTemp='')">重置</a-button> -->
                 <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
                   <a-icon :type="advanced ? 'up' : 'down'"/>
