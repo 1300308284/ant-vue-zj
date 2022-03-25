@@ -109,6 +109,11 @@ const vueConfig = {
         target: 'http://172.23.0.137:8088/email/',
         // ws: true,
         changeOrigin: true
+      },
+      '/valuationTime': {
+        target: 'http://172.23.0.137:8088/email/',
+        // ws: true,
+        changeOrigin: true
       }
       // '/emailRule': { // TODO 有接口后再调整
       //   // target: 'http://127.0.0.1:8088/', // http://localhost:8088/emailRule/queryDealerInfo

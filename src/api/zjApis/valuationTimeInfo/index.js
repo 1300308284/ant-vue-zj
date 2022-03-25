@@ -7,6 +7,6 @@ const baseApi = {
   queryValuationTimeById: baseUrl + '/queryValuationTimeById', // 修改的回显查询(根据id查询)
   saveValuationTime: baseUrl + '/saveValuationTime' // 新增或修改数据（估值表信息）
 }
-export const queryValuationTimeInfo = params => request({ url: baseApi.queryValuationTimeInfo, method: 'get', params })
+export const queryValuationTimeInfo = data => request({ url: baseApi.queryValuationTimeInfo, method: 'post', data })
 export const queryValuationTimeById = params => request({ url: baseApi.queryValuationTimeById, method: 'get', params })
 export const saveValuationTime = data => request({ url: baseApi.saveValuationTime, method: 'post', data })

@@ -158,8 +158,12 @@ const columns = [
     dataIndex: 'notifyTime'
   },
   {
-    title: '收件人',
-    dataIndex: 'senders'
+    title: '托管组收件人',
+    dataIndex: 'custodyRecipients'
+  },
+  {
+    title: '外包组收件人',
+    dataIndex: 'wbRecipients'
   },
   // {
   //   title: '启用',
