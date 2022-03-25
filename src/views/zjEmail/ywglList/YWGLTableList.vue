@@ -37,7 +37,7 @@
                   placeholder="input search text"
                   style="width: 200px"
                   :default-active-first-option="false"
-                  :show-arrow="false"
+                  :show-arrow="true"
                   :filter-option="false"
                   :not-found-content="null"
                   @search="handleSearch"
