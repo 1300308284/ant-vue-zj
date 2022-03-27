@@ -105,13 +105,37 @@ const vueConfig = {
     port: 8099,
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
-      '/email': {
-        target: 'http://172.23.0.137:8088/email/',
+      // '/email': {
+      //   // target: 'http://172.23.0.137:8088/',
+      //   target: 'http://127.0.0.1:8088/',
+      //   // ws: true,
+      //   changeOrigin: true
+      // },
+      '/emailRule': {
+        // target: 'http://172.23.0.137:8088/',
+        target: 'http://127.0.0.1:8088/',
+        // ws: true,
+        changeOrigin: true
+      },
+      '/emailAccount': {
+        // target: 'http://172.23.0.137:8088/',
+        target: 'http://127.0.0.1:8088/',
+        // ws: true,
+        changeOrigin: true
+      },
+      '/emailAccountBiz': {
+        // target: 'http://172.23.0.137:8088/',
+        target: 'http://127.0.0.1:8088/',
         // ws: true,
         changeOrigin: true
       },
       '/valuationTime': {
-        target: 'http://172.23.0.137:8088/email/',
+        target: 'http://127.0.0.1:8088/',
+        // ws: true,
+        changeOrigin: true
+      },
+      '/repeatEmail': {
+        target: 'http://127.0.0.1:8088/',
         // ws: true,
         changeOrigin: true
       }

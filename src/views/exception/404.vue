@@ -2,7 +2,7 @@
   <a-result status="404" title="404" sub-title="Sorry, the page you visited does not exist.">
     <template #extra>
       <a-button type="primary" @click="toHome">
-        Back Home
+        AC综合运营平台
       </a-button>
     </template>
   </a-result>
@@ -13,7 +13,8 @@ export default {
   name: 'Exception404',
   methods: {
     toHome () {
-      this.$router.push({ path: '/list' }) // TODO 暂时跳到list页, 后根据需求到首页
+      // this.$router.push({ path: '/list' }) // TODO 暂时跳到list页, 后根据需求到首页
+      this.$router.push({ path: '/list/table-list/tg/01' }) // TODO 暂时跳到list页, 后根据需求到首页
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    :title="model && model.id > 0 ? '修改规则' : '新建规则'"
+    title="重复交易文件/对账单"
     :width="'calc(100vw - 700px)'"
     :visible="visible"
     :confirmLoading="loading"
@@ -11,38 +11,38 @@
       <a-form :form="form" v-bind="formLayout">
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
-            <a-form-item label="账套号">
+            <a-form-item label="产品名称">
               <a-input v-decorator.trim="['faccountCode']" @change="handleFaccountCodeChange"/>
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
-            <a-form-item label="基金代码">
-              <a-input :disabled="true" v-decorator.trim="['fundCode']" />
+            <a-form-item label="邮箱">
+              <a-input :disabled="false" v-decorator.trim="['fundCode']" />
             </a-form-item>
           </a-col>
         </a-row>
 
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
-            <a-form-item label="产品名称">
-              <a-input :disabled="true" v-decorator.trim="['productName']" />
+            <a-form-item label="标题">
+              <a-input :disabled="false" v-decorator.trim="['productName']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
-            <a-form-item label="估值批次">
-              <a-input :disabled="true" v-decorator.trim="['valBatchName', {rules: [{required: true, min: 3, message: '请按格式T+0填写'}]}]" />
+            <a-form-item label="发件人">
+              <a-input :disabled="false" v-decorator.trim="['valBatchName']" />
             </a-form-item>
           </a-col>
         </a-row>
 
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
-            <a-form-item label="券商\期货商">
+            <a-form-item label="收件人">
               <a-input :disabled="false" v-decorator.trim="['dealerName']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
-            <a-form-item label="标题">
+            <a-form-item label="抄送">
               <a-input v-decorator.trim="['title']" />
             </a-form-item>
           </a-col>
@@ -50,35 +50,38 @@
 
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
-            <a-form-item label="发件人">
+            <a-form-item label="密送">
               <a-input v-decorator.trim="['senders']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
-            <a-form-item label="附件个数">
+            <a-form-item label="收件时间">
               <a-input v-decorator.trim="['attachCount', { rules: [{type: 'string'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="48">
-          <a-col :span="24" :md="12" :sm="24">
-            <a-form-item label="密码文件名">
+          <a-col :md="12" :sm="24">
+            <a-form-item label="邮箱">
               <a-input v-decorator.trim="['ciperFileName']" />
             </a-form-item>
           </a-col>
-        </a-row>
-        <a-row :gutter="48">
           <a-col :md="12" :sm="24">
-            <a-form-item label="密码">
+            <a-form-item label="附件文件名">
               <a-input v-decorator.trim="['ciper']" />
             </a-form-item>
           </a-col>
         </a-row>
-        <a-row>
+        <!-- <a-row :gutter="48">
+          <a-col :md="12" :sm="24">
+            <a-form-item label="是否启用">
+              <a-switch default-checked @change="handleOnChange"/>
+            </a-form-item>
+          </a-col>
+        </a-row> -->
+        <!-- <a-row>
           <a-col>
-            <a-divider orientation="center">
-              <h3 style="font-weight: bold; color: red">规则说明: </h3>
-            </a-divider>
+            <h3>规则说明: </h3>
             <p>  1、账套号：输入账套号回车后，调用接口获取基金代码、产品名称、、估值批次等信息，自动填入相关字段；</p>
             <p>  2、通知时间：为固定时间点，到指定的时间点，将当前规则的检查结果，邮件通知给相关的人员；</p>
             <p>  3、附件个数为邮件附件中压缩文件个数，压缩类型zip,rar,7z,tar，“对账单文件规则”不显示该元素；</p>
@@ -87,7 +90,7 @@
             <p>  6、密码文件名：支持模糊匹配 附件名包含密码文件名即可；</p>
             <p>  7、查询界面，每个业务组只能看到自己配置的规则；</p>
           </a-col>
-        </a-row>
+        </a-row> -->
       </a-form>
     </a-spin>
   </a-modal>
@@ -96,9 +99,6 @@
 <script>
 import pick from 'lodash.pick'
 import debounce from 'lodash.debounce'
-import {
-  queryFaccountInfo
-  } from '@/api/zjApis/tgemailRuleConfig/dealFileRule'
 
 // 表单字段
 const fields = [
@@ -127,7 +127,7 @@ export default {
     },
     model: {
       type: Object,
-      default: () => {}
+      default: () => null
     }
   },
   data () {
@@ -154,32 +154,15 @@ export default {
     // 当 model 发生改变时，为表单设置值
     this.$watch('model', () => {
       this.model && this.form.setFieldsValue(pick(this.model, fields))
-    }, {
-  deep: true
-})
+    })
   },
   methods: {
     handleOnChange (checked) {
       console.log(`a-switch to ${checked}`);
     },
     handleFaccountCodeChange: debounce(function (item, val) {
+      // TODO 待此帐套号item.target.value查相关信息
       console.log('>val>账套号:111>:', item.target.value)
-      const faccountCode = item.target.value
-      queryFaccountInfo({ faccountCode }).then(res => {
-        console.log('>res>待此帐套号item.target.value查相关信息>:', res)
-        // TODO 待后端调其他查询接口, 返真实数据
-        // this.model && this.form.setFieldsValue({
-          const timer = setTimeout(_ => {
-              clearTimeout(timer)
-            this.form.setFieldsValue({
-              fundCode: 'fundCode999',
-              productName: '产品名称999',
-              valBatchName: 'T+999'
-            })
-          }, 100)
-      }).catch(err => {
-        console.log('>err>待此帐套号item.target.value查相关信息>:', err)
-      })
     }, 1000)
   }
 }

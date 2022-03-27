@@ -1,7 +1,7 @@
 <template>
   <a-modal
-    :title="model && model.id > 0 ? '修改邮箱绑定业务' : '新建邮箱绑定业务'"
-    :width="'calc(100vw - 500px)'"
+    title="重复交易文件/对账单"
+    :width="'calc(100vw - 700px)'"
     :visible="visible"
     :confirmLoading="loading"
     @ok="() => { $emit('ok', model) }"
@@ -11,36 +11,74 @@
       <a-form :form="form" v-bind="formLayout">
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
-            <a-form-item label="邮箱账号">
-              <a-input v-decorator.trim="['account']" @change="handleFaccountCodeChange"/>
+            <a-form-item label="产品名称">
+              <a-input v-decorator.trim="['faccountCode']" @change="handleFaccountCodeChange"/>
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
-            <a-form-item label="邮箱密码">
-              <a-input :disabled="false"  v-decorator.trim="['pwd']" />
+            <a-form-item label="邮箱">
+              <a-input :disabled="false" v-decorator.trim="['fundCode']" />
             </a-form-item>
           </a-col>
         </a-row>
 
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
-            <a-form-item label="邮箱服务器">
-              <a-input :disabled="false" v-decorator.trim="['emailServer']" />
+            <a-form-item label="标题">
+              <a-input :disabled="false" v-decorator.trim="['productName']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
-            <a-form-item label="附件存储根路径">
-              <a-input :disabled="false" v-decorator.trim="['attachRootPath']" />
+            <a-form-item label="发件人">
+              <a-input :disabled="false" v-decorator.trim="['valBatchName']" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+        <a-row :gutter="48">
+          <a-col :md="12" :sm="24">
+            <a-form-item label="收件人">
+              <a-input :disabled="false" v-decorator.trim="['dealerName']" />
+            </a-form-item>
+          </a-col>
+          <a-col :md="12" :sm="24">
+            <a-form-item label="抄送">
+              <a-input v-decorator.trim="['title']" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+        <a-row :gutter="48">
+          <a-col :md="12" :sm="24">
+            <a-form-item label="密送">
+              <a-input v-decorator.trim="['senders']" />
+            </a-form-item>
+          </a-col>
+          <a-col :md="12" :sm="24">
+            <a-form-item label="收件时间">
+              <a-input v-decorator.trim="['attachCount', { rules: [{type: 'string'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
-            <a-form-item label="描述">
-              <a-input :disabled="false" type="textarea" v-decorator.trim="['comments']" />
+            <a-form-item label="邮箱">
+              <a-input v-decorator.trim="['ciperFileName']" />
+            </a-form-item>
+          </a-col>
+          <a-col :md="12" :sm="24">
+            <a-form-item label="附件文件名">
+              <a-input v-decorator.trim="['ciper']" />
             </a-form-item>
           </a-col>
         </a-row>
+        <!-- <a-row :gutter="48">
+          <a-col :md="12" :sm="24">
+            <a-form-item label="是否启用">
+              <a-switch default-checked @change="handleOnChange"/>
+            </a-form-item>
+          </a-col>
+        </a-row> -->
         <!-- <a-row>
           <a-col>
             <h3>规则说明: </h3>
@@ -64,16 +102,16 @@ import debounce from 'lodash.debounce'
 
 // 表单字段
 const fields = [
-  'account',
-  'attachRootPath',
-  'comments',
-  'emailName',
-  'emailServer',
-  'id',
-  'logTime',
-  'pushFlg',
-  'pushUrls',
-  'pwd',
+  'faccountCode',
+  'fundCode',
+  'productName',
+  'valBatchName',
+  'dealerName',
+  'title',
+  'senders',
+  'attachCount',
+  'ciperFileName',
+  'ciper',
   'status'
 ]
 
@@ -104,9 +142,6 @@ export default {
       }
     }
     return {
-      value: 1,
-      accountTemp: '',
-      dealerData: [],
       form: this.$form.createForm(this)
     }
   },
@@ -122,28 +157,6 @@ export default {
     })
   },
   methods: {
-    onChange (e) {
-      console.log('radio checked', e.target.value);
-    },
-    handleSearch (value) { // TODO ?待接口
-      console.log('>邮箱绑定业务--11----->:', value)
-      // fetch(value, data => (this.data = data))
-      const cloneData = JSON.parse(JSON.stringify(this.dealerData))
-      value && (this.dealerData = cloneData.map((item, index) => {
-        if (item.dealerName?.indexOf(value) > -1) {
-          console.log('>匹配查到了>>:', item)
-          return item
-        } else {
-          // console.log('>没有匹配到>>:', item.dealerName)
-        }
-      }))
-    },
-    handleChange (value, aa) { // 确认用name不用code
-      console.log('邮箱绑定业务', value)
-      // console.log('change22', aa)
-      // this.queryParam.dealerCode = value?.key
-      this.queryParam.account = value?.key
-    },
     handleOnChange (checked) {
       console.log(`a-switch to ${checked}`);
     },

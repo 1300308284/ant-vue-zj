@@ -175,7 +175,7 @@ import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'
 
 import StepByStepModal from './modules/StepByStepModal'
-import CreateForm from './modules/CreateForm'
+import CreateForm from './modules/CreateForm02'
 
 const columns = [
   {
@@ -294,7 +294,10 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: {
+        groupCode: 'tg',
+        bizCode: '02'
+      },
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
@@ -430,6 +433,11 @@ export default {
           } else {
             // 新增
             modal?.id && (values.id = modal?.id)
+            values = {
+              groupCode: 'tg',
+              bizCode: '02',
+              ...values
+            }
             saveEmailRuleAndValuationTime(values).then(res => {
               console.log('>新增>>:', res)
               this.visible = false

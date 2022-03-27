@@ -19,7 +19,7 @@ const baseApi = {
 // 交易的code：bizCode：01，
 // 对账单的code：bizCode：02
 // const assignData = data => ({ ...data, groupCode: data.gcFlag === 'tg' ? 'tg' : 'wb', bizCode: data.bcFlag === '01' ? '01' : '02' })
-const assignData = data => ({ ...data, groupCode: 'tg' })
+const assignData = data => data
 
 export const queryEmailRuleInfo = data => request({ url: baseApi.queryEmailRuleInfo, method: 'post', data: assignData(data) })
 export const queryDealerInfo = params => request({ url: baseApi.queryDealerInfo, method: 'get', params: assignData(params) })
@@ -32,7 +32,7 @@ export const queryFaccountInfo = data => new Promise((resolve, reject) => {
     faccountCode: '99999',
     fundCode: 'fundCode999',
     productName: '产品名称999',
-    valBatchName: 'T+999'
+    valBatchName: 'T+0'
   }
   resolve(resObj)
 })

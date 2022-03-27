@@ -6,9 +6,84 @@
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
               <a-form-item label="业务日期">
-                <a-range-picker @change="onChange" />
+                <a-input v-model.trim="queryParam.faccountCode" placeholder="请输入账套号"/>
               </a-form-item>
             </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item label="券商\期货商">
+                <a-select
+                  show-search
+                  v-model="dealerNameTemp"
+                  placeholder="请选择"
+                  default-value="0"
+                  :default-active-first-option="false"
+                  :show-arrow="true"
+                  :filter-option="true"
+                  :not-found-content="null"
+                  :label-in-value="true"
+                  @search="handleSearch"
+                  @change="handleChange" >
+                  <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
+                  <a-select-option
+                    v-for="(item,index) in dealerData"
+                    :key="item.dealerCode + index"
+                    :value="item.dealerName">
+                    {{ item.dealerName }}
+                  </a-select-option>
+                </a-select>
+                <!-- <a-select
+                  show-search
+                  :value="value"
+                  placeholder="input search text"
+                  style="width: 200px"
+                  :default-active-first-option="false"
+                  :show-arrow="true"
+                  :filter-option="false"
+                  :not-found-content="null"
+                  @search="handleSearch"
+                  @change="handleChange"
+                >
+                  <a-select-option v-for="d in data" :key="d.value">
+                    {{ d.text }}
+                  </a-select-option>
+                </a-select> -->
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item label="产品名称">
+                <a-input v-model.trim="queryParam.productName" placeholder="请输入产品名称" style="width: 100%"/>
+              </a-form-item>
+            </a-col>
+            <!-- <template v-if="advanced">
+              <a-col :md="8" :sm="24">
+                <a-form-item label="产品名称">
+                  <a-input v-model="queryParam.callNo" style="width: 100%"/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="更新日期">
+                  <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="使用状态">
+                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
+                    <a-select-option value="0">全部</a-select-option>
+                    <a-select-option value="1">关闭</a-select-option>
+                    <a-select-option value="2">运行中</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="使用状态">
+                  <a-select placeholder="请选择" default-value="0">
+                    <a-select-option value="0">全部</a-select-option>
+                    <a-select-option value="1">关闭</a-select-option>
+                    <a-select-option value="2">运行中</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+            </template> -->
             <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
@@ -24,7 +99,7 @@
       </div>
 
       <div class="table-operator">
-        <!-- <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button> -->
+        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
         <!-- <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -67,7 +142,7 @@
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">查看</a>
+            <a @click="handleEdit(record)">修改</a>
             <!-- <a-divider type="vertical" />
             <a @click="handleSub(record)">删除</a> -->
           </template>
@@ -91,7 +166,7 @@
 import {
   queryDealerInfo,
   queryEmailRuleInfo,
-  // queryEmailRuleById,
+  queryEmailRuleById,
   updateEmailRuleStatus,
   saveEmailRuleAndValuationTime
   } from '@/api/zjApis/tgemailRuleConfig/dealFileRule'
@@ -100,7 +175,7 @@ import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'
 
 import StepByStepModal from './modules/StepByStepModal'
-import CreateForm from './modules/CreateForm'
+import CreateForm from './modules/CreateForm01'
 
 const columns = [
   {
@@ -108,32 +183,28 @@ const columns = [
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '重复邮件详情',
+    title: '账套号',
     dataIndex: 'faccountCode'
   },
   {
-    title: '账套号',
+    title: '基金代码',
     dataIndex: 'fundCode'
   },
   {
-    title: '基金代码',
+    title: '产品名称',
     dataIndex: 'productName'
   },
   {
-    title: '产品名称',
+    title: '估值批次',
     dataIndex: 'valBatchName'
   },
   {
-    title: '估值时效',
+    title: '券商\\期货商',
     dataIndex: 'dealerName'
   },
   {
-    title: '券商\\期货商',
-    dataIndex: 'valBatchName1'
-  },
-  {
     title: '标题',
-    dataIndex: 'valBatchName2'
+    dataIndex: 'title'
   },
   {
     title: '发件人',
@@ -143,9 +214,35 @@ const columns = [
     title: '附件个数',
     dataIndex: 'attachCount'
   },
+  {
+    title: '启用',
+    scopedSlots: { customRender: 'status' }
+  },
   // {
-  //   title: '启用',
+  //   title: '密码文件名',
+  //   dataIndex: 'no'
+  // },
+  // {
+  //   title: '描述',
+  //   dataIndex: 'description',
+  //   scopedSlots: { customRender: 'description' }
+  // },
+  // {
+  //   title: '服务调用次数',
+  //   dataIndex: 'callNo',
+  //   sorter: true,
+  //   needTotal: true,
+  //   customRender: (text) => text + ' 次'
+  // },
+  // {
+  //   title: '状态',
+  //   dataIndex: 'status',
   //   scopedSlots: { customRender: 'status' }
+  // },
+  // {
+  //   title: '更新时间',
+  //   dataIndex: 'updatedAt',
+  //   sorter: true
   // },
   {
     title: '操作',
@@ -197,7 +294,10 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: {
+        groupCode: 'wb',
+        bizCode: '01'
+      },
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
@@ -240,9 +340,6 @@ export default {
     }
   },
   methods: {
-    onChange (date, dateString) {
-      console.log(date, dateString);
-    },
     handleOnChange (statusChange, record) {
       this.recordId = record.id
       console.log('>status>>:', statusChange)
@@ -299,15 +396,15 @@ export default {
     handleEdit (record) {
       console.log('>xiugai 修改>>:', record)
       this.mdl = { ...record }
-      this.visible = true
-      // queryEmailRuleById({ id: record.id }).then(res => {
-      //   // console.log('>queryEmailRuleById>修改id>:', res)
-      //   if (res.status === 1) {
-      //     // this.mdl = res.dataValue
-      //   }
-      // }).catch(err => {
-      //   console.log('>queryEmailRuleById>异常列表 by id >:', err)
-      // })
+      queryEmailRuleById({ id: record.id }).then(res => {
+        // console.log('>queryEmailRuleById>修改id>:', res)
+        if (res.status === 1) {
+          // this.mdl = res.dataValue
+          this.visible = true
+        }
+      }).catch(err => {
+        console.log('>queryEmailRuleById>异常列表 by id >:', err)
+      })
     },
     handleOk (modal) {
       console.log('>modal>子组件发射来的值>:', modal)
@@ -335,6 +432,11 @@ export default {
           } else {
             // 新增
             modal?.id && (values.id = modal?.id)
+            values = {
+              bizCode: '01',
+              groupCode: 'wb',
+              ...values
+            }
             saveEmailRuleAndValuationTime(values).then(res => {
               console.log('>新增>>:', res)
               this.visible = false

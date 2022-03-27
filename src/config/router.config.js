@@ -78,24 +78,31 @@ export const asyncRouterMap = [
         name: 'tgList',
         component: RouteView,
         // redirect: '/zjEmail/tgList/table-list',
-        redirect: '/list/table-list/groupCode=tg&bizCode=01',
+        redirect: '/list/table-list/tg/01',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
         meta: { title: '托管组邮件规则管理', icon: 'form' },
         children: [
           {
             // path: '/list/table-list',
-            path: '/list/table-list/groupCode=tg&bizCode=01',
-            name: 'TableListWrapper',
+            path: '/list/table-list/:groupCode/:bizCode',
+            name: 'TGTableListWrapper',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/zjEmail/tgList/TGTableList'),
+            component: () => import('@/views/zjEmail/tgList/TGTableList01'),
             meta: { title: '交易文件规则', keepAlive: true, permission: ['table'] }
           },
           {
             path: '/list/basic-list/groupCode=tg&bizCode=02',
-            name: 'BasicList',
-            component: () => import('@/views/zjEmail/tgList/TGBasicList'),
+            name: 'TGBasicList',
+            component: () => import('@/views/zjEmail/tgList/TGBasicList02'),
             // component: () => import('@/views/list/TableList'),
             meta: { title: '对账单文件规则', keepAlive: true, permission: ['table'] }
+          },
+          {
+            path: '/list/basic-list/groupCode=tg&bizCode=03?',
+            name: 'TGBasicListBizCode02',
+            component: () => import('@/views/zjEmail/tgList/TGReaptEmialList03'),
+            // component: () => import('@/views/list/TableList'),
+            meta: { title: '重复交易文件/对账单', keepAlive: true, permission: ['table'] }
           }
         ]
       },
@@ -109,17 +116,24 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/list/table-list/groupCode=wb&bizCode=01?',
-            name: 'TableListWrapperBizCode01',
+            name: 'WBTableListWrapperBizCode01',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/zjEmail/wbList/WBTableList'),
-            meta: { title: '外包对账单文件规则', keepAlive: true, permission: ['table'] }
+            component: () => import('@/views/zjEmail/wbList/WBTableList01'),
+            meta: { title: '交易文件规则', keepAlive: true }
           },
           {
-            path: '/list/basic-list/groupCode=wb&bizCode=02?',
-            name: 'BasicListBizCode02',
-            component: () => import('@/views/zjEmail/wbList/WBBasicList'),
+            path: '/list/basic-list/groupCode=wb&bizCode=02',
+            name: 'WBBasicList',
+            component: () => import('@/views/zjEmail/wbList/WBBasicList02'),
             // component: () => import('@/views/list/TableList'),
-            meta: { title: '重复交易文件/对账单', keepAlive: true, permission: ['table'] }
+            meta: { title: '对账单文件规则', keepAlive: true }
+          },
+          {
+            path: '/list/basic-list/groupCode=wb&bizCode=03',
+            name: 'WBBasicListBizCode02',
+            component: () => import('@/views/zjEmail/wbList/WBReaptEmialList03'),
+            // component: () => import('@/views/list/TableList'),
+            meta: { title: '重复交易文件/对账单', keepAlive: true }
           }
         ]
       },

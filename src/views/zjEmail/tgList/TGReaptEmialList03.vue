@@ -5,89 +5,16 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
-              <a-form-item label="账套号">
-                <a-input v-model.trim="queryParam.faccountCode" placeholder="请输入账套号"/>
+              <a-form-item label="业务日期">
+                <a-date-picker @change="onChange">
+                  <a-icon slot="suffixIcon" type="smile" />
+                </a-date-picker>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item label="券商\期货商">
-                <a-select
-                  show-search
-                  v-model="dealerNameTemp"
-                  placeholder="请选择"
-                  default-value="0"
-                  :default-active-first-option="false"
-                  :show-arrow="true"
-                  :filter-option="true"
-                  :not-found-content="null"
-                  :label-in-value="true"
-                  @search="handleSearch"
-                  @change="handleChange" >
-                  <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
-                  <a-select-option
-                    v-for="(item,index) in dealerData"
-                    :key="item.dealerCode + index"
-                    :value="item.dealerName">
-                    {{ item.dealerName }}
-                  </a-select-option>
-                </a-select>
-                <!-- <a-select
-                  show-search
-                  :value="value"
-                  placeholder="input search text"
-                  style="width: 200px"
-                  :default-active-first-option="false"
-                  :show-arrow="true"
-                  :filter-option="false"
-                  :not-found-content="null"
-                  @search="handleSearch"
-                  @change="handleChange"
-                >
-                  <a-select-option v-for="d in data" :key="d.value">
-                    {{ d.text }}
-                  </a-select-option>
-                </a-select> -->
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item label="产品名称">
-                <a-input v-model.trim="queryParam.productName" placeholder="请输入产品名称" style="width: 100%"/>
-              </a-form-item>
-            </a-col>
-            <!-- <template v-if="advanced">
-              <a-col :md="8" :sm="24">
-                <a-form-item label="产品名称">
-                  <a-input v-model="queryParam.callNo" style="width: 100%"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="更新日期">
-                  <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-            </template> -->
             <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, dealerNameTemp='')">重置</a-button>
+                <!-- <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, dealerNameTemp='')">重置</a-button> -->
                 <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
                   <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -99,7 +26,7 @@
       </div>
 
       <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <!-- <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button> -->
         <!-- <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -142,7 +69,7 @@
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">修改</a>
+            <a @click="handleEdit(record)">查看</a>
             <!-- <a-divider type="vertical" />
             <a @click="handleSub(record)">删除</a> -->
           </template>
@@ -164,23 +91,25 @@
 
 <script>
 import {
-  queryDealerInfo,
-  queryEmailRuleInfo,
-  queryEmailRuleById,
-  updateEmailRuleStatus,
-  saveEmailRuleAndValuationTime
-  } from '@/api/zjApis/tgemailRuleConfig/dealFileRule'
+  queryRepeatEmailRule,
+  queryRepeatEmailDetail,
+  queryRepeatEmailRuleCount
+  } from '@/api/zjApis/repeatEmail/index'
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 // import { getRoleList } from '@/api/manage'
 
 import StepByStepModal from './modules/StepByStepModal'
-import CreateForm from './modules/CreateForm'
+import CreateForm from './modules/TGReaptEmail03'
 
 const columns = [
   {
     title: '序号',
     scopedSlots: { customRender: 'serial' }
+  },
+  {
+    title: '业务名称',
+    dataIndex: 'bizName'
   },
   {
     title: '账套号',
@@ -195,7 +124,7 @@ const columns = [
     dataIndex: 'productName'
   },
   {
-    title: '估值批次',
+    title: '估值时效',
     dataIndex: 'valBatchName'
   },
   {
@@ -214,35 +143,9 @@ const columns = [
     title: '附件个数',
     dataIndex: 'attachCount'
   },
-  {
-    title: '启用',
-    scopedSlots: { customRender: 'status' }
-  },
   // {
-  //   title: '密码文件名',
-  //   dataIndex: 'no'
-  // },
-  // {
-  //   title: '描述',
-  //   dataIndex: 'description',
-  //   scopedSlots: { customRender: 'description' }
-  // },
-  // {
-  //   title: '服务调用次数',
-  //   dataIndex: 'callNo',
-  //   sorter: true,
-  //   needTotal: true,
-  //   customRender: (text) => text + ' 次'
-  // },
-  // {
-  //   title: '状态',
-  //   dataIndex: 'status',
+  //   title: '启用',
   //   scopedSlots: { customRender: 'status' }
-  // },
-  // {
-  //   title: '更新时间',
-  //   dataIndex: 'updatedAt',
-  //   sorter: true
   // },
   {
     title: '操作',
@@ -270,7 +173,7 @@ const statusMap = {
     text: '异常'
   }
 }
-
+const tempDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`
 export default {
   name: 'TableList',
   components: {
@@ -294,19 +197,22 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: {
+        groupCode: 'tg',
+        bizDate: tempDate
+      },
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
-        console.log('loadData 请求参数>:', requestParameters)
-        return queryEmailRuleInfo(requestParameters)
+        console.log('loadData 请求参数555>:', requestParameters)
+        return queryRepeatEmailRule(requestParameters)
           .then(res => {
           this.localLoading = false
-            console.log('>queryEmailRuleInfo>成功>:', res)
+            console.log('>queryRepeatEmailRule>成功>:', res)
             return res.dataValue
           }).catch(err => {
           this.localLoading = false
-            console.log('queryEmailRuleInfo 请求失败>err>>:', err)
+            console.log('queryRepeatEmailRule 请求失败>err>>:', err)
           })
       },
       selectedRowKeys: [],
@@ -326,7 +232,6 @@ export default {
     // TODO groupCode;//业务组编码 ----- 必传  所有这个菜单下都需要这个
     // TODO 托管的code：groupCode：tg，外包的code：groupCode：wb；交易的code：bizCode：01，对账单的code：bizCode：02
     // this.queryParam.groupCode = this.$router.query?.groupCode || 'tg'
-    console.log('>路由参数>>:', this.$router)
     this.init()
   },
   computed: {
@@ -338,30 +243,38 @@ export default {
     }
   },
   methods: {
+    onChange (date, dateString) {
+      console.log('日期....>>>', dateString)
+      this.queryParam.bizDate = dateString
+    },
     handleOnChange (statusChange, record) {
       this.recordId = record.id
       console.log('>status>>:', statusChange)
       console.log('>record>>:', record.id)
-      const status = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
-      const id = record.id // 此条id
-      updateEmailRuleStatus({ id, status }).then(res => {
-        this.recordId = null
-        console.log(status ? '>启用成功>>:' : '>禁用成功>>:', res)
-        this.loadData()
-      }).catch(err => {
-        this.recordId = null
-        console.log('>启用失败>>:', err)
-      })
+      // const status = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
+      // const id = record.id // 此条id
+      // updateEmailRuleStatus({ id, status }).then(res => {
+      //   this.recordId = null
+      //   console.log(status ? '>启用成功>>:' : '>禁用成功>>:', res)
+      //   this.loadData()
+      // }).catch(err => {
+      //   this.recordId = null
+      //   console.log('>启用失败>>:', err)
+      // })
     },
     init () {
-      queryDealerInfo().then(res => {
-        console.log('>res>>:', res)
+      const reqData = {
+        bizDate: tempDate,
+        groupCode: 'tg'
+      }
+      queryRepeatEmailRuleCount(reqData).then(res => {
+        console.log('>res>查询托管或者外包的重复的交易或者对账单配置规则的个数>:', res)
         this.dealerData = res.dataValue
       }).catch(err => {
         console.log('>err>>:', err)
       })
 
-      // queryEmailRuleInfo(this.queryParam).then(res => {
+      // queryRepeatEmailRule(this.queryParam).then(res => {
       //   console.log('>res>>:', res)
       //   this.emailRuleList = res
       // }).catch(err => {
@@ -392,16 +305,20 @@ export default {
       this.visible = true
     },
     handleEdit (record) {
-      console.log('>xiugai 修改>>:', record)
-      this.mdl = { ...record }
-      queryEmailRuleById({ id: record.id }).then(res => {
-        // console.log('>queryEmailRuleById>修改id>:', res)
+      console.log('>xiugai 查看>>:', record)
+      // this.mdl = { ...record }
+      const reqData = {
+        id: record.id,
+        bizDate: this.queryParam.bizDate
+      }
+      queryRepeatEmailDetail(reqData).then(res => {
+        console.log('>queryRepeatEmailDetail>重复交易文件/对账单>>>id>:', res)
         if (res.status === 1) {
-          // this.mdl = res.dataValue
           this.visible = true
+          this.mdl = res.dataValue
         }
       }).catch(err => {
-        console.log('>queryEmailRuleById>异常列表 by id >:', err)
+        console.log('>queryRepeatEmailDetail>重复交易文件/对账单>>异常列表 by id >:', err)
       })
     },
     handleOk (modal) {
@@ -430,21 +347,21 @@ export default {
           } else {
             // 新增
             modal?.id && (values.id = modal?.id)
-            saveEmailRuleAndValuationTime(values).then(res => {
-              console.log('>新增>>:', res)
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
+            // saveEmailRuleAndValuationTime(values).then(res => {
+            //   console.log('>新增>>:', res)
+            //   this.visible = false
+            //   this.confirmLoading = false
+            //   // 重置表单数据
+            //   form.resetFields()
+            //   // 刷新表格
+            //   this.$refs.table.refresh()
 
-              this.$message.info('新增成功')
-            }).catch(err => {
-              this.visible = false
-              this.confirmLoading = false
-              console.log('>新增失败>>:', err)
-            })
+            //   this.$message.info('新增成功')
+            // }).catch(err => {
+            //   this.visible = false
+            //   this.confirmLoading = false
+            //   console.log('>新增失败>>:', err)
+            // })
             // new Promise((resolve, reject) => {
             //   setTimeout(() => {
             //     resolve()

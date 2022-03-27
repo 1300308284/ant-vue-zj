@@ -25,9 +25,9 @@ const constantRouterComponents = {
 
   // list
   // TableList: () => import('@/views/list/TableList'),
-  TableList: () => import('@/views/zjEmail/tgList/TGTableList'),
+  TableList: () => import('@/views/zjEmail/tgList/TGTableList01'),
   // StandardList: () => import('@/views/list/BasicList'),
-  StandardList: () => import('@/views/zjEmail/tgList/TGBasicList'),
+  StandardList: () => import('@/views/zjEmail/tgList/TGBasicList02'),
   CardList: () => import('@/views/list/CardList'),
   SearchLayout: () => import('@/views/list/search/SearchLayout'),
   SearchArticles: () => import('@/views/list/search/Article'),
