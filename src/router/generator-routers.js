@@ -83,13 +83,11 @@ const rootRouter = {
  * @returns {Promise<Router>}
  */
 export const generatorDynamicRouter = token => {
-  debugger
   return new Promise((resolve, reject) => {
     loginService
       .getCurrentUserNav(token)
       .then(res => {
         console.log('generatorDynamicRouter response:', res)
-        debugger
         const { result } = res
         const menuNav = []
         const childrenNav = []

@@ -42,7 +42,6 @@ export default {
       this.$emit('finish')
     },
     toOrderList () {
-      debugger
       this.$router.push('/list/table-list')
     }
   }

@@ -17,7 +17,7 @@
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="邮箱密码">
-              <a-input :disabled="false"  v-decorator.trim="['pwd']" />
+              <a-input :disabled="false" v-decorator.trim="['pwd']" />
             </a-form-item>
           </a-col>
         </a-row>

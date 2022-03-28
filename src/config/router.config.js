@@ -166,13 +166,13 @@ export const asyncRouterMap = [
             path: '/list/table-list/yjgl=yxgl?',
             name: 'TableListWrapperYjgl',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/zjEmail/yjglList/YjglTableList'),
+            component: () => import('@/views/zjEmail/yjglList/YjglTableList01'),
             meta: { title: '邮箱管理', keepAlive: true, permission: ['table'] }
           },
           {
             path: '/list/basic-list/yjgl=yxbdyw?',
             name: 'BasicListYjgl',
-            component: () => import('@/views/zjEmail/yjglList/YjglBasicList'),
+            component: () => import('@/views/zjEmail/yjglList/YjglBasicList02'),
             // component: () => import('@/views/list/TableList'),
             meta: { title: '邮箱绑定业务', keepAlive: true, permission: ['table'] }
           }
