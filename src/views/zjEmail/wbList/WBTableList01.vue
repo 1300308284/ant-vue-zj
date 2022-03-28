@@ -13,17 +13,13 @@
               <a-form-item label="券商\期货商">
                 <a-select
                   show-search
-                  v-model="dealerNameTemp"
+                  allowClear
                   placeholder="请选择"
-                  default-value="0"
-                  :default-active-first-option="false"
-                  :show-arrow="true"
-                  :filter-option="true"
-                  :not-found-content="null"
-                  :label-in-value="true"
-                  @search="handleSearch"
-                  @change="handleChange" >
-                  <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
+                  option-filter-prop="children"
+                  v-model="queryParam.dealerName"
+                  :filter-option="filterOption"
+                  @change="handleChange"
+                >
                   <a-select-option
                     v-for="(item,index) in dealerData"
                     :key="item.dealerCode + index"
@@ -87,7 +83,7 @@
             <a-col :md="!advanced && 6 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {}, dealerNameTemp='')">重置</a-button>
+                <a-button style="margin-left: 8px" @click="handleResest">重置</a-button>
                 <!-- <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
                   <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -387,7 +383,17 @@ export default {
       console.log('change11', value)
       // console.log('change22', aa)
       // this.queryParam.dealerCode = value?.key
-      this.queryParam.dealerName = value?.key
+      this.queryParam.dealerName = value
+    },
+    filterOption (input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
+    handleResest () {
+      this.queryParam.faccountCode = undefined
+      this.queryParam.dealerName = undefined
+      this.queryParam.productName = undefined
     },
     handleAdd () {
       this.mdl = null

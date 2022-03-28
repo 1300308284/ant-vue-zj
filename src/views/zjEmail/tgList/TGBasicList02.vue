@@ -13,17 +13,13 @@
               <a-form-item label="券商\期货商">
                 <a-select
                   show-search
-                  v-model="dealerNameTemp"
+                  allowClear
                   placeholder="请选择"
-                  default-value="0"
-                  :default-active-first-option="false"
-                  :show-arrow="true"
-                  :filter-option="true"
-                  :not-found-content="null"
-                  :label-in-value="true"
-                  @search="handleSearch"
-                  @change="handleChange" >
-                  <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
+                  option-filter-prop="children"
+                  v-model="queryParam.dealerName"
+                  :filter-option="filterOption"
+                  @change="handleChange"
+                >
                   <a-select-option
                     v-for="(item,index) in dealerData"
                     :key="item.dealerCode + index"
@@ -31,22 +27,6 @@
                     {{ item.dealerName }}
                   </a-select-option>
                 </a-select>
-                <!-- <a-select
-                  show-search
-                  :value="value"
-                  placeholder="input search text"
-                  style="width: 200px"
-                  :default-active-first-option="false"
-                  :show-arrow="true"
-                  :filter-option="false"
-                  :not-found-content="null"
-                  @search="handleSearch"
-                  @change="handleChange"
-                >
-                  <a-select-option v-for="d in data" :key="d.value">
-                    {{ d.text }}
-                  </a-select-option>
-                </a-select> -->
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
@@ -388,7 +368,12 @@ export default {
       console.log('change11', value)
       // console.log('change22', aa)
       // this.queryParam.dealerCode = value?.key
-      this.queryParam.dealerName = value?.key
+      this.queryParam.dealerName = value
+    },
+    filterOption (input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
     },
     handleAdd () {
       this.mdl = null

@@ -38,23 +38,15 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="券商\期货商">
-              <!-- <a-input :disabled="false" v-decorator.trim="['dealerName']" /> -->
-              <!-- v-model="dealerNameTemp" -->
-              <!-- v-decorator.trim="['dealerName', {initialValue: queryParam.dealerName}]" -->
-              <!-- v-model="queryParam.dealerName" -->
               <a-select
                 show-search
-                :value="dealerNameTemp"
+                allowClear
                 placeholder="请选择"
-                default-value="0"
-                :default-active-first-option="false"
-                :show-arrow="true"
-                :filter-option="true"
-                :not-found-content="null"
-                :label-in-value="true"
-                @search="handleSearch"
-                @change="handleChange" >
-                <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
+                option-filter-prop="children"
+                v-decorator.trim="['dealerName', {initialValue: queryParam.productName}]"
+                :filter-option="filterOption"
+                @change="handleChange"
+              >
                 <a-select-option
                   v-for="(item,index) in dealerData"
                   :key="item.dealerCode + index"
@@ -172,9 +164,9 @@ export default {
       queryParam: {
         dealerName: '',
         valBatchName: '',
-        attachCount: 0,
+        attachCount: '',
         fundCode: '',
-        productName: '',
+        productName: undefined,
         ciperFileName: '',
         ciper: ''
       },
@@ -219,13 +211,18 @@ export default {
       //   }
       // }))
     },
+    filterOption (input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
     handleChange (value, aa) { // 确认用name不用code
       console.log('change999999', value)
       // this.queryParam.dealerCode = value?.key
-      this.queryParam.dealerName = value?.key
-      this.dealerNameTemp = value?.key
-      this.model.dealerName = value?.key
-      console.log('change299999992', this.queryParam.dealerName)
+      this.queryParam.dealerName = value
+      // this.dealerNameTemp = value?.key
+      // this.model.dealerName = value?.key
+      // console.log('change299999992', this.queryParam.dealerName)
     },
     handleOnChange (checked) {
       console.log(`a-switch to ${checked}`);

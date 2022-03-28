@@ -10,7 +10,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
-              <a-form-item label="券商\期货商">
+              <a-form-item label="券商\期货商11">
                 <a-select
                   show-search
                   v-model="dealerNameTemp"

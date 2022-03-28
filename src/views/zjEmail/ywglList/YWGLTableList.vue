@@ -11,19 +11,15 @@
             </a-col> -->
             <a-col :md="6" :sm="24">
               <a-form-item label="估值批次">
-                <!-- v-model.trim="queryParam.id" -->
                 <a-select
+                  show-search
+                  allowClear
                   placeholder="请选择"
-                  default-value="0"
-                  :default-active-first-option="false"
-                  :allowClear="true"
-                  :show-arrow="true"
-                  :filter-option="true"
-                  :not-found-content="null"
-                  :label-in-value="true"
-                  @search="handleSearch"
-                  @change="handleChange" >
-                  <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
+                  option-filter-prop="children"
+                  v-model.trim="queryParam.id"
+                  :filter-option="filterOption"
+                  @change="handleChange"
+                >
                   <a-select-option
                     v-for="(item,index) in valBatchNameData"
                     :key="item.notifyTime + index"
@@ -31,22 +27,6 @@
                     {{ item.valBatchName }}
                   </a-select-option>
                 </a-select>
-                <!-- <a-select
-                  show-search
-                  :value="value"
-                  placeholder="input search text"
-                  style="width: 200px"
-                  :default-active-first-option="false"
-                  :show-arrow="true"
-                  :filter-option="false"
-                  :not-found-content="null"
-                  @search="handleSearch"
-                  @change="handleChange"
-                >
-                  <a-select-option v-for="d in data" :key="d.value">
-                    {{ d.text }}
-                  </a-select-option>
-                </a-select> -->
               </a-form-item>
             </a-col>
             <a-col :md="!advanced && 6 || 24" :sm="24">
@@ -219,7 +199,9 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: {
+        id: undefined
+      },
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
@@ -305,11 +287,16 @@ export default {
       //   }
       // }))
     },
+    filterOption (input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
     handleChange (value, aa) { // 确认用name不用code
       console.log('change11', value)
       // console.log('change22', aa)
       // this.queryParam.dealerCode = value?.key
-      this.queryParam.id = value?.key
+      this.queryParam.id = value
     },
     handleAdd () {
       this.mdl = null
