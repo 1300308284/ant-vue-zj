@@ -1,5 +1,8 @@
 <template>
   <div :class="wrpCls">
+    <a-badge :count="count" :offset="[-3, 0]" title="未读消息数">
+      <a href="#"><a-icon type="bell" style="margin-right: 5px" /></a>
+    </a-badge>
     <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
     <select-lang :class="prefixCls" />
   </div>
@@ -36,7 +39,8 @@ export default {
   data () {
     return {
       showMenu: true,
-      currentUser: {}
+      currentUser: {},
+      count: 2
     }
   },
   computed: {
