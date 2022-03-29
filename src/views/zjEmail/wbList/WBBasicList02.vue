@@ -410,7 +410,6 @@ export default {
               ...values
             }
           const pendingData = saveEmailRuleAndValuationTime(values)
-          debugger
           if (values.id > 0) {
             // 修改 e.g.
             pendingData.then(res => {
