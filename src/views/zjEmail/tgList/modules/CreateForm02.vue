@@ -43,14 +43,14 @@
                 allowClear
                 placeholder="请选择"
                 option-filter-prop="children"
-                v-decorator.trim="['dealerName', {initialValue: queryParam.dealerName}]"
+                v-decorator.trim="['dealerCode', {initialValue: queryParam.dealerCode}]"
                 :filter-option="filterOption"
                 @change="handleChange"
               >
                 <a-select-option
                   v-for="(item,index) in dealerData"
                   :key="item.dealerCode + index"
-                  :value="item.dealerName">
+                  :value="item.dealerCode">
                   {{ item.dealerName }}
                 </a-select-option>
               </a-select>
@@ -89,6 +89,13 @@
             </a-form-item>
           </a-col>
         </a-row>
+        <a-row style="display: none;">
+          <a-col>
+            <a-form-item label="id">
+              <a-input v-decorator="['id']"/>
+            </a-form-item>
+          </a-col>
+        </a-row>
         <a-row>
           <a-col>
             <a-divider orientation="center">
@@ -123,6 +130,8 @@ const fields = [
   'productName',
   'valBatchName',
   'dealerName',
+  'dealerCode',
+  'id',
   'title',
   'senders',
   'attachCount',
@@ -160,15 +169,7 @@ export default {
     return {
       dealerData: [],
       dealerNameTemp: '',
-      queryParam: {
-        dealerName: undefined,
-        valBatchName: '',
-        attachCount: 0,
-        fundCode: '',
-        productName: '',
-        ciperFileName: '',
-        ciper: ''
-      },
+      queryParam: {},
       form: this.$form.createForm(this)
     }
   },

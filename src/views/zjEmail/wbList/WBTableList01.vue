@@ -401,11 +401,11 @@ export default {
     },
     handleEdit (record) {
       console.log('>xiugai 修改>>:', record)
-      this.mdl = { ...record }
+      // this.mdl = { ...record }
       queryEmailRuleById({ id: record.id }).then(res => {
         // console.log('>queryEmailRuleById>修改id>:', res)
         if (res.status === 1) {
-          // this.mdl = res.dataValue
+          this.mdl = res.dataValue
           this.visible = true
         }
       }).catch(err => {
@@ -419,13 +419,15 @@ export default {
       form.validateFields((errors, values) => {
         if (!errors) {
           console.log('新增校验, 成功values', values)
+          values = {
+            bizCode: '01',
+            groupCode: 'wb',
+            ...values
+          }
+          const pendingData = saveEmailRuleAndValuationTime(values)
           if (values.id > 0) {
             // 修改 e.g.
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
+            pendingData.then(res => {
               this.visible = false
               this.confirmLoading = false
               // 重置表单数据
@@ -437,13 +439,7 @@ export default {
             })
           } else {
             // 新增
-            modal?.id && (values.id = modal?.id)
-            values = {
-              bizCode: '01',
-              groupCode: 'wb',
-              ...values
-            }
-            saveEmailRuleAndValuationTime(values).then(res => {
+            pendingData.then(res => {
               console.log('>新增>>:', res)
               this.visible = false
               this.confirmLoading = false

@@ -43,14 +43,14 @@
                 allowClear
                 placeholder="请选择"
                 option-filter-prop="children"
-                v-decorator.trim="['dealerName', {initialValue: queryParam.productName}]"
+                v-decorator.trim="['dealerCode', {initialValue: queryParam.dealerCode}]"
                 :filter-option="filterOption"
                 @change="handleChange"
               >
                 <a-select-option
                   v-for="(item,index) in dealerData"
                   :key="item.dealerCode + index"
-                  :value="item.dealerName">
+                  :value="item.dealerCode">
                   {{ item.dealerName }}
                 </a-select-option>
               </a-select>
@@ -89,6 +89,13 @@
             </a-form-item>
           </a-col>
         </a-row>
+        <a-row style="display: none;">
+          <a-col>
+            <a-form-item label="id">
+              <a-input v-decorator="['id']"/>
+            </a-form-item>
+          </a-col>
+        </a-row>
         <a-row>
           <a-col>
             <a-divider orientation="center">
@@ -122,6 +129,8 @@ const fields = [
   'fundCode',
   'productName',
   'valBatchName',
+  'dealerCode',
+  'id',
   'dealerName',
   'title',
   'dealerNameTemp',
@@ -218,11 +227,8 @@ export default {
     },
     handleChange (value, aa) { // 确认用name不用code
       console.log('change999999', value)
-      // this.queryParam.dealerCode = value?.key
-      this.queryParam.dealerName = value
-      // this.dealerNameTemp = value?.key
-      // this.model.dealerName = value?.key
-      // console.log('change299999992', this.queryParam.dealerName)
+      this.queryParam.dealerCode = value?.key
+      console.log('change299999992', this.queryParam.dealerCode)
     },
     handleOnChange (checked) {
       console.log(`a-switch to ${checked}`);
