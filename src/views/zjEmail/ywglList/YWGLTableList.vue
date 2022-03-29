@@ -110,7 +110,7 @@
 <script>
 import {
   queryValuationTimeInfo, // 查询所有的估值批次
-  // queryValuationTimeById, // 修改的回显查询(根据id查询)
+  queryValuationTimeById, // 修改的回显查询(根据id查询)
   saveValuationTime
   } from '@/api/zjApis/valuationTimeInfo/index'
 import moment from 'moment'
@@ -230,9 +230,6 @@ export default {
   },
   created () {
     // getRoleList({ t: new Date() }) // 暂时没有用户, 看需求
-    // TODO groupCode;//业务组编码 ----- 必传  所有这个菜单下都需要这个
-    // TODO 托管的code：groupCode：tg，外包的code：groupCode：wb；交易的code：bizCode：01，对账单的code：bizCode：02
-    // this.queryParam.groupCode = this.$router.query?.groupCode || 'tg'
     this.init()
   },
   computed: {
@@ -304,16 +301,19 @@ export default {
     },
     handleEdit (record) {
       console.log('>xiugai 修改>>:', record)
-      this.mdl = record
+      // this.mdl = record
       this.visible = true
-      // queryValuationTimeById({ id: record.id }).then(res => {
-      //   // console.log('>queryValuationTimeById>修改id>:', res)
-      //   if (res.status === 1) {
-      //     // this.mdl = res.dataValue
-      //   }
-      // }).catch(err => {
-      //   console.log('>queryValuationTimeById>异常列表 by id >:', err)
-      // })
+      queryValuationTimeById({ id: record.id }).then(res => {
+        // console.log('>queryValuationTimeById>修改id>:', res)
+        if (res.status === 1) {
+          const resData = res.dataValue
+          // 后端关心时分, 月日随便定义
+          resData.notifyTime = moment(new Date('2022-11-11 ' + resData.notifyTime))
+          this.mdl = resData
+        }
+      }).catch(err => {
+        console.log('>queryValuationTimeById>异常列表 by id >:', err)
+      })
     },
     handleOk (modal) {
       console.log('>modal>子组件发射来的值>:', modal)
@@ -321,14 +321,13 @@ export default {
       this.confirmLoading = true
       form.validateFields((errors, values) => {
         if (!errors) {
-          console.log('新增校验, 成功values', values)
+          console.log('新增校验成功values', values)
+          // 日期对象转 时分 字符串
+          values.notifyTime = moment(values.notifyTime).format('HH:mm')
+          const pendingData = saveValuationTime(values)
           if (values.id > 0) {
             // 修改 e.g.
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
+            pendingData.then(res => {
               this.visible = false
               this.confirmLoading = false
               // 重置表单数据
@@ -340,8 +339,7 @@ export default {
             })
           } else {
             // 新增
-            modal?.id && (values.id = modal?.id)
-            saveValuationTime(values).then(res => {
+            pendingData.then(res => {
               console.log('>新增>>:', res)
               this.visible = false
               this.confirmLoading = false

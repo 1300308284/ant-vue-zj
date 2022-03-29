@@ -28,7 +28,11 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="数据准备时间">
-              <a-time-picker v-decorator.trim="['notifyTime']" :default-value="moment('12:08', 'HH:mm')" format="HH:mm" />
+              <a-time-picker
+                v-decorator.trim="['notifyTime']"
+                :default-value="moment('12:08', 'HH:mm')"
+                @change="handleOnChangeTime"
+                format="HH:mm" />
               <!-- <a-input :disabled="false" v-decorator.trim="['notifyTime']" /> -->
               <!-- <a-range-picker @change="onChange" v-decorator.trim="['notifyTime']">
                 <a-icon slot="suffixIcon" type="smile" />
@@ -49,6 +53,13 @@
               <!-- <a-range-picker @change="onChange" v-decorator.trim="['wbRecipients']">
                 <a-icon slot="suffixIcon" type="smile" />
               </a-range-picker> -->
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row style="display: none;">
+          <a-col>
+            <a-form-item label="id">
+              <a-input v-decorator.trim="['id']"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -82,12 +93,17 @@ const fields = [
   'productName',
   'valBatchName',
   'dealerName',
+  'id',
   'title',
   'senders',
   'attachCount',
   'ciperFileName',
   'ciper',
-  'status'
+  'status',
+  'custodyRecipients',
+  'wbRecipients',
+  'notifyTime',
+  'notifyDate'
 ]
 
 export default {
@@ -138,6 +154,10 @@ export default {
     },
     handleOnChange (checked) {
       console.log(`a-switch to ${checked}`);
+    },
+    handleOnChangeTime (val) {
+      console.log('>val>11>:', val)
+      console.log('>val>22>:', val.format('HH:mm'))
     },
     handleFaccountCodeChange: debounce(function (item, val) {
       // TODO 待此帐套号item.target.value查相关信息
