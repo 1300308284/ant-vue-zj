@@ -99,6 +99,13 @@
             </a-form-item>
           </a-col>
         </a-row>
+        <a-row style="display: none;">
+          <a-col>
+            <a-form-item label="id">
+              <a-input v-decorator="['id']"/>
+            </a-form-item>
+          </a-col>
+        </a-row>
         <!-- <a-row>
           <a-col>
             <h3>规则说明: </h3>

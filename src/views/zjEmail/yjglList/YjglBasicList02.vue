@@ -7,7 +7,7 @@
             <a-col :md="6" :sm="24">
               <a-form-item label="邮箱账号">
                 <!-- v-model="accountTemp" -->
-                <a-select
+                <!-- <a-select
                   placeholder="请选择"
                   default-value="0"
                   :default-active-first-option="false"
@@ -17,7 +17,21 @@
                   :label-in-value="true"
                   @search="handleSearch"
                   @change="handleChange" >
-                  <!-- <a-select-option value="0">券商期货商1</a-select-option> -->
+                  <a-select-option
+                    v-for="(item,index) in dealerData"
+                    :key="item.id + index"
+                    :value="item.account">
+                    {{ item.account }}
+                  </a-select-option>
+                </a-select> -->
+                <a-select
+                  show-search
+                  allowClear
+                  placeholder="请选择"
+                  option-filter-prop="children"
+                  :filter-option="filterOption"
+                  @change="handleChange"
+                >
                   <a-select-option
                     v-for="(item,index) in dealerData"
                     :key="item.id + index"
@@ -25,22 +39,6 @@
                     {{ item.account }}
                   </a-select-option>
                 </a-select>
-                <!-- <a-select
-                  show-search
-                  :value="value"
-                  placeholder="input search text"
-                  style="width: 200px"
-                  :default-active-first-option="false"
-                  :show-arrow="true"
-                  :filter-option="false"
-                  :not-found-content="null"
-                  @search="handleSearch"
-                  @change="handleChange"
-                >
-                  <a-select-option v-for="d in data" :key="d.value">
-                    {{ d.text }}
-                  </a-select-option>
-                </a-select> -->
               </a-form-item>
             </a-col>
             <a-col :md="!advanced && 6 || 24" :sm="24">
@@ -293,13 +291,18 @@ export default {
       //     return item
       //   } else {
       //     // console.log('>没有匹配到>>:', item.dealerName)
-      //   }
+      //   }group_code
       // }))
+    },
+    filterOption (input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
     },
     handleChange (value) { // 确认用name不用code
       console.log('邮箱绑定业务', value)
       // this.queryParam.dealerCode = value?.key
-      this.queryParam.account = value?.key
+      this.queryParam.account = value
     },
     handleAdd () {
       this.mdl = null
@@ -307,11 +310,10 @@ export default {
     },
     handleEdit (record) {
       console.log('>xiugai 修改>>:', record)
-      this.mdl = { ...record }
       queryEmailAccountBizById({ id: record.id }).then(res => {
         // console.log('>queryEmailAccountBizById>修改id>:', res)
         if (res.status === 1) {
-          // this.mdl = res.dataValue
+          this.mdl = res.dataValue
           this.visible = true
         }
       }).catch(err => {
@@ -325,13 +327,11 @@ export default {
       form.validateFields((errors, values) => {
         if (!errors) {
           console.log('新增校验, 成功values', values)
+          // 新增修改同一接口, 后端判断有无id区分
+          const pendingData = saveEmailAccountBiz(values)
           if (values.id > 0) {
             // 修改 e.g.
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
+            pendingData.then(res => {
               this.visible = false
               this.confirmLoading = false
               // 重置表单数据
@@ -343,10 +343,7 @@ export default {
             })
           } else {
             // 新增
-            modal?.id && (values.id = modal?.id)
-            values.bizCode = values.bizCode.trim()
-            values.groupCode = values.groupCode.trim()
-            saveEmailAccountBiz(values).then(res => {
+            pendingData.then(res => {
               console.log('>新增>>:', res)
               this.visible = false
               this.confirmLoading = false
