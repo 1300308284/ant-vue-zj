@@ -219,9 +219,6 @@ export default {
   },
   created () {
     // getRoleList({ t: new Date() }) // 暂时没有用户, 看需求
-    // TODO groupCode;//业务组编码 ----- 必传  所有这个菜单下都需要这个
-    // TODO 托管的code：groupCode：tg，外包的code：groupCode：wb；交易的code：bizCode：01，对账单的code：bizCode：02
-    // this.queryParam.groupCode = this.$router.query?.groupCode || 'tg'
     this.init()
   },
   computed: {
@@ -237,16 +234,16 @@ export default {
       this.recordId = record.id
       console.log('>status>>:', statusChange)
       console.log('>record>>:', record.id)
-      const status = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
+      const pushFlg = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
       const id = record.id // 此条id
-      // TODO 是否推送
-      updateEmailPushFlg({ id, status }).then(res => {
+      // 是否推送
+      updateEmailPushFlg({ id, pushFlg }).then(res => {
         this.recordId = null
-        console.log(status ? '>启用成功>>:' : '>禁用成功>>:', res)
+        console.log(pushFlg ? '>推送成功>>:' : '>禁用推送成功>>:', res)
         this.loadData()
       }).catch(err => {
         this.recordId = null
-        console.log('>启用失败>>:', err)
+        console.log('>推送失败>>:', err)
       })
     },
     handleOnChange (statusChange, record) {
@@ -304,11 +301,11 @@ export default {
     },
     handleEdit (record) {
       console.log('>xiugai 修改>>:', record)
-      this.mdl = { ...record }
+      // this.mdl = { ...record }
       queryEmailAccountById({ id: record.id }).then(res => {
         // console.log('>queryEmailAccountById>修改id>:', res)
         if (res.status === 1) {
-          // this.mdl = res.dataValue
+          this.mdl = res.dataValue
           this.visible = true
         }
       }).catch(err => {
