@@ -113,30 +113,30 @@ const vueConfig = {
       // },
       '/emailRule': {
         // target: 'http://172.23.0.137:8088/',
-        target: 'http://127.0.0.1:8088/',
-        // ws: true,
+        target: 'http://127.0.0.1:8088/eagle',
+        ws: true,
         changeOrigin: true
       },
       '/emailAccount': {
         // target: 'http://172.23.0.137:8088/',
-        target: 'http://127.0.0.1:8088/',
-        // ws: true,
+        target: 'http://127.0.0.1:8088/eagle',
+        ws: true,
         changeOrigin: true
       },
       '/emailAccountBiz': {
         // target: 'http://172.23.0.137:8088/',
-        target: 'http://127.0.0.1:8088/',
-        // ws: true,
+        target: 'http://127.0.0.1:8088/eagle',
+        ws: true,
         changeOrigin: true
       },
       '/valuationTime': {
-        target: 'http://127.0.0.1:8088/',
-        // ws: true,
+        target: 'http://127.0.0.1:8088/eagle',
+        ws: true,
         changeOrigin: true
       },
       '/repeatEmail': {
-        target: 'http://127.0.0.1:8088/',
-        // ws: true,
+        target: 'http://127.0.0.1:8088/eagle',
+        ws: true,
         changeOrigin: true
       }
       // '/emailRule': { // TODO 有接口后再调整
