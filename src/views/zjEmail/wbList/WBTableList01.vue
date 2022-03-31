@@ -5,7 +5,7 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
-              <a-form-item label="业务日期">
+              <a-form-item label="账套号">
                 <a-input v-model.trim="queryParam.faccountCode" placeholder="请输入账套号"/>
               </a-form-item>
             </a-col>

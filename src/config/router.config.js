@@ -1,6 +1,10 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
-// import { bxAnaalyse } from '@/core/icons'
+import {
+  tggz,
+  wbjywjgz,
+  yjgl,
+  ywgzgl } from '@/core/icons'
 
 const RouteView = {
   name: 'RouteView',
@@ -80,7 +84,7 @@ export const asyncRouterMap = [
         // redirect: '/zjEmail/tgList/table-list',
         redirect: '/list/table-list/tg/01',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
-        meta: { title: '托管组邮件规则管理', icon: 'form' },
+        meta: { title: '托管组邮件规则管理', icon: tggz },
         children: [
           {
             // path: '/list/table-list',
@@ -112,7 +116,7 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/list/table-list',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
-        meta: { title: '外包交易文件规则', icon: 'form' },
+        meta: { title: '外包交易文件规则', icon: wbjywjgz },
         children: [
           {
             path: '/list/table-list/groupCode=wb&bizCode=01?',
@@ -143,7 +147,7 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/list/table-list',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
-        meta: { title: '业务规制管理', icon: 'form' },
+        meta: { title: '业务规制管理', icon: ywgzgl },
         children: [
           {
             path: '/list/table-list/ywgl=ywgl?',
@@ -160,7 +164,7 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/list/table-list',
         // meta: { title: 'menu.list', icon: 'table', permission: ['table'] }, // 更换语言in18
-        meta: { title: '邮件管理', icon: 'form' },
+        meta: { title: '邮件管理', icon: yjgl },
         children: [
           {
             path: '/list/table-list/yjgl=yxgl?',

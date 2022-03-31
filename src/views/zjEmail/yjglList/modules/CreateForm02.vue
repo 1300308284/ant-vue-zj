@@ -36,7 +36,7 @@
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
-            <a-form-item label="业务编号">
+            <a-form-item label="业务组名称">
               <!-- <a-input :disabled="false" type="pwd" v-decorator.trim="['bizCode', {rules: [{required: true, min: 3, message: '请选择'}]}]" /> -->
               <a-select
                 show-search
