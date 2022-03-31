@@ -18,13 +18,15 @@ import { loadLanguageAsync } from '@/locales'
 
 const app = {
   state: {
+    navTheme: 'light',
+    primaryColor: '#FAAD14',
     sideCollapsed: false,
     isMobile: false,
-    theme: 'dark',
-    layout: '',
-    contentWidth: '',
-    fixedHeader: false,
-    fixedSidebar: false,
+    theme: 'light',
+    layout: 'sidemenu',
+    contentWidth: 'Fluid',
+    fixedHeader: true,
+    fixedSidebar: true,
     autoHideHeader: false,
     color: '',
     weak: false,
