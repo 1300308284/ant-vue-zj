@@ -36,6 +36,24 @@
         </a-row>
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
+            <a-form-item label="推送">
+              <!-- <a-input :disabled="false" v-decorator.trim="['emailServer']" /> -->
+              <!-- :defaultChecked="record.status === '0' ? true : false" -->
+              <a-switch
+                size="small"
+                v-decorator.trim="['pushFlg']"
+                @change="handleOnPushFlg"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :md="12" :sm="24">
+            <a-form-item label="推送URL">
+              <a-input :disabled="false" v-decorator.trim="['pushUrls', {rules: [{required: isRequired ? true : false, min: 1, message: '推送URL不能为空'}]}]" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="48">
+          <a-col :md="12" :sm="24">
             <a-form-item label="描述">
               <a-input :disabled="false" type="textarea" v-decorator.trim="['comments']" />
             </a-form-item>
@@ -61,6 +79,9 @@
 <script>
 import pick from 'lodash.pick'
 import debounce from 'lodash.debounce'
+// import {
+//   updateEmailPushFlg
+//   } from '@/api/zjApis/emailManage/index.js'
 
 // 表单字段
 const fields = [
@@ -107,6 +128,7 @@ export default {
       value: 1,
       accountTemp: '',
       dealerData: [],
+      isRequired: false,
       form: this.$form.createForm(this)
     }
   },
@@ -122,6 +144,23 @@ export default {
     })
   },
   methods: {
+    handleOnPushFlg (statusChange, record) {
+      this.isRequired = statusChange ? 1 : 0 // 是否启用 ：0 可用，1：不可用
+      // this.switchLoading = true
+      // console.log('>status>>:', statusChange)
+      // console.log('>record>>:', record.id)
+      // const pushFlg = statusChange ? 0 : 1 // 是否启用 ：0 可用，1：不可用
+      // const id = record.id // 此条id
+      // 是否推送 不用单独调 推送接口了
+      // updateEmailPushFlg({ id, pushFlg }).then(res => {
+      //   this.switchLoading = true
+      //   console.log(pushFlg ? '>推送成功>>:' : '>禁用推送成功>>:', res)
+      //   // this.loadData()
+      // }).catch(err => {
+      //   this.switchLoading = true
+      //   console.log('>推送失败>>:', err)
+      // })
+    },
     onChange (e) {
       console.log('radio checked', e.target.value);
     },

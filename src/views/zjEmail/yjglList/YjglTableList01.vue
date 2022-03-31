@@ -51,11 +51,12 @@
         </span>
         <span slot="pushFlg" slot-scope="record">
           <template>
-            <a-switch
+            {{ record.status === '0' ? '是' : '否' }}
+            <!-- <a-switch
               size="small"
               :loading="recordId === record.id"
               :defaultChecked="record.status === '0' ? true : false"
-              @change="handleOnPushFlg($event, record)"/>
+              @change="handleOnPushFlg($event, record)"/> -->
           </template>
         </span>
         <span slot="status" slot-scope="record">
@@ -317,15 +318,13 @@ export default {
       const form = this.$refs.createModal.form
       this.confirmLoading = true
       form.validateFields((errors, values) => {
+        values.pushFlg = values.pushFlg ? 0 : 1
+        const pendingData = saveEmailAccount(values)
         if (!errors) {
           console.log('新增校验, 成功values', values)
           if (values.id > 0) {
             // 修改 e.g.
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
+            pendingData.then(res => {
               this.visible = false
               this.confirmLoading = false
               // 重置表单数据
@@ -337,8 +336,7 @@ export default {
             })
           } else {
             // 新增
-            modal?.id && (values.id = modal?.id)
-            saveEmailAccount(values).then(res => {
+              pendingData.then(res => {
               console.log('>新增>>:', res)
               this.visible = false
               this.confirmLoading = false
