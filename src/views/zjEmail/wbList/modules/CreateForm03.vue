@@ -1,27 +1,27 @@
 <template>
   <a-modal
     :title="'查看详情'"
-    :width="'calc(100vw - 700px)'"
+    :width="'calc(100vw - 200px)'"
     :visible="visible"
     :confirmLoading="loading"
-    @ok="() => { $emit('ok', model) }"
+    @ok="() => { $emit('cancel') }"
     @cancel="() => { $emit('cancel') }"
   >
     <a-spin :spinning="loading">
       <s-table
         ref="table"
         size="default"
-        :rowKey="(record) => record.faccountCode + record.id + record.valBatchName"
+        :rowKey="(record) => record.id"
         :columns="columns"
         :data="loadData"
         :alert="false"
-        showPagination="auto"
+        :showPagination="loadData.length > 9 ? 'auto' : ''"
       >
         <!-- :rowSelection="rowSelection" -->
         <span slot="serial" slot-scope="text, record, index">
           {{ index + 1 }}
         </span>
-        <span slot="status" slot-scope="record">
+        <!-- <span slot="status" slot-scope="record">
           <template>
             <a-switch
               size="small"
@@ -29,21 +29,19 @@
               :defaultChecked="record.status === '0' ? true : false"
               @change="handleOnChange($event, record)"/>
           </template>
+        </span> -->
+        <span slot="receivedTime" slot-scope="text, record">
+          {{ moment(record.receivedTime).format('YY-MM-DD HH:mm') }}
         </span>
-        <!-- <span slot="status" slot-scope="text">
-          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-        </span>
-        <span slot="description" slot-scope="text">
+        <!-- <span slot="description" slot-scope="text">
           <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
         </span> -->
 
-        <span slot="action" slot-scope="text, record">
+        <!-- <span slot="action" slot-scope="text, record">
           <template>
             <a @click="handleEdit(record)">查看</a>
-            <!-- <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a> -->
           </template>
-        </span>
+        </span> -->
       </s-table>
     </a-spin>
   </a-modal>
@@ -52,6 +50,8 @@
 <script>
 import pick from 'lodash.pick'
 import debounce from 'lodash.debounce'
+import moment from 'moment'
+import { STable } from '@/components'
 import {
   queryFaccountInfo
   } from '@/api/zjApis/tgemailRuleConfig/dealFileRule'
@@ -95,7 +95,8 @@ const columns = [
   },
   {
     title: '收件时间',
-    dataIndex: 'receivedTime'
+    // dataIndex: 'receivedTime'
+    scopedSlots: { customRender: 'receivedTime' }
   },
   {
     title: '附件文件名',
@@ -120,6 +121,8 @@ const fields = [
   'valBatchName',
   'dealerName',
   'title',
+  'id',
+  'bizDate',
   'senders',
   'attachCount',
   'ciperFileName',
@@ -128,6 +131,9 @@ const fields = [
 ]
 
 export default {
+  components: {
+    STable
+  },
   props: {
     visible: {
       type: Boolean,
@@ -139,7 +145,7 @@ export default {
     },
     model: {
       type: Object,
-      default: () => {}
+      default: () => null
     }
   },
   data () {
@@ -154,12 +160,13 @@ export default {
       }
     }
     return {
+      moment,
       columns,
       form: this.$form.createForm(this),
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        const requestParameters = Object.assign({}, parameter, this.queryParam)
-        console.log('loadData 请求参数555>:', requestParameters)
+        const requestParameters = Object.assign(this.model, parameter, this.queryParam)
+        console.log('loadData 请求参数577777755>:', requestParameters)
         return queryRepeatEmailDetail(requestParameters)
           .then(res => {
           this.localLoading = false

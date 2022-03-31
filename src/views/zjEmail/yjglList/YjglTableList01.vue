@@ -51,7 +51,7 @@
         </span>
         <span slot="pushFlg" slot-scope="record">
           <template>
-            {{ record.status === '0' ? '是' : '否' }}
+            {{ record.pushFlg === '0' ? '是' : '否' }}
             <!-- <a-switch
               size="small"
               :loading="recordId === record.id"
@@ -306,7 +306,10 @@ export default {
       queryEmailAccountById({ id: record.id }).then(res => {
         // console.log('>queryEmailAccountById>修改id>:', res)
         if (res.status === 1) {
-          this.mdl = res.dataValue
+          const resData = res.dataValue
+          // eslint-disable-next-line no-unneeded-ternary
+          resData.pushFlg = resData.pushFlg === '1' ? false : true
+          this.mdl = resData
           this.visible = true
         }
       }).catch(err => {

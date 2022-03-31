@@ -12,12 +12,12 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="邮箱账号">
-              <a-input v-decorator.trim="['account']" @change="handleFaccountCodeChange"/>
+              <a-input v-decorator.trim="['account', {initialValue: model ? model.account : ''}]" @change="handleFaccountCodeChange"/>
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="邮箱密码">
-              <a-input :disabled="false" v-decorator.trim="['pwd']" />
+              <a-input :disabled="false" v-decorator.trim="['pwd', {initialValue: model ? model.pwd : ''}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -25,12 +25,12 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="邮箱服务器">
-              <a-input :disabled="false" v-decorator.trim="['emailServer']" />
+              <a-input :disabled="false" v-decorator.trim="['emailServer', {initialValue: model ? model.emailServer : ''}]" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="附件存储根路径">
-              <a-input :disabled="false" v-decorator.trim="['attachRootPath']" />
+              <a-input :disabled="false" v-decorator.trim="['attachRootPath', {initialValue: model ? model.attachRootPath : ''}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -39,23 +39,24 @@
             <a-form-item label="推送">
               <!-- <a-input :disabled="false" v-decorator.trim="['emailServer']" /> -->
               <!-- :defaultChecked="record.status === '0' ? true : false" -->
+              <!-- :defaultChecked="model && model.pushFlg" -->
               <a-switch
                 size="small"
-                v-decorator.trim="['pushFlg']"
+                v-decorator.trim="['pushFlg', {valuePropName: 'checked', initialValue: model ? model.pushFlg: true}]"
                 @change="handleOnPushFlg"
               />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item label="推送URL">
-              <a-input :disabled="false" v-decorator.trim="['pushUrls', {rules: [{required: isRequired ? true : false, min: 1, message: '推送URL不能为空'}]}]" />
+              <a-input :disabled="false" v-decorator.trim="['pushUrls', {initialValue: model ? model.comments : '', rules: [{required: isRequired ? true : false, min: 1, message: '推送URL不能为空'}]}]" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="描述">
-              <a-input :disabled="false" type="textarea" v-decorator.trim="['comments']" />
+              <a-input :disabled="false" type="textarea" v-decorator.trim="['comments', {initialValue: model ? model.comments : ''}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -139,9 +140,38 @@ export default {
     fields.forEach(v => this.form.getFieldDecorator(v))
 
     // 当 model 发生改变时，为表单设置值
-    this.$watch('model', () => {
-      this.model && this.form.setFieldsValue(pick(this.model, fields))
-    })
+    // this.$watch('model', () => {
+    //   this.$nextTick(_ => {
+    //     this.model && this.form.setFieldsValue(pick(this.model, fields))
+    //   })
+    // })
+  },
+  watch: {
+    // 'model.pushFlg': {
+    //   handler (newName, oldName) {
+    //      console.log('obj.a changed111', newName);
+    //     this.$nextTick(_ => {
+    //        this.model.pushFlg = newName
+    //       // this.form.setFieldsValue({
+    //       //   pushFlg: newName
+    //       // })
+    //     })
+    //     //  console.log('obj.a changed222', oldName);
+    //   },
+    //   immediate: true
+    // },
+    model: {
+      handler (newName, oldName) {
+        console.log('obj.a changed111', newName);
+        this.$nextTick(_ => {
+          // this.model = Object.assign({}, newName)
+          // this.model.pushFlg = newName
+          this.form.setFieldsValue(pick(this.model, fields))
+        })
+      },
+      immediate: true,
+      deep: true
+    }
   },
   methods: {
     handleOnPushFlg (statusChange, record) {

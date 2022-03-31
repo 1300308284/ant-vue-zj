@@ -6,7 +6,7 @@
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
               <a-form-item label="业务日期">
-                <a-date-picker @change="onChange">
+                <a-date-picker :default-value="moment(new Date(), 'YYYY-MM-DD')" @change="onChange">
                   <a-icon slot="suffixIcon" type="smile" />
                 </a-date-picker>
               </a-form-item>
@@ -243,6 +243,7 @@ export default {
     }
   },
   methods: {
+    moment,
     onChange (date, dateString) {
       console.log('日期....>>>', dateString)
       this.queryParam.bizDate = dateString

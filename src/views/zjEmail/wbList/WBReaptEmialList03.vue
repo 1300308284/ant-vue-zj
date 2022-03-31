@@ -6,7 +6,7 @@
           <a-row :gutter="48">
             <a-col :md="6" :sm="24">
               <a-form-item label="业务日期">
-                <a-date-picker @change="onChange">
+                <a-date-picker :default-value="moment(new Date(), 'YYYY-MM-DD')" @change="onChange">
                   <a-icon slot="suffixIcon" type="smile" />
                 </a-date-picker>
               </a-form-item>
@@ -92,7 +92,7 @@
 <script>
 import {
   queryRepeatEmailRule,
-  queryRepeatEmailDetail,
+  // queryRepeatEmailDetail,
   queryRepeatEmailRuleCount
   } from '@/api/zjApis/repeatEmail/index'
 import moment from 'moment'
@@ -243,6 +243,7 @@ export default {
     }
   },
   methods: {
+    moment,
     onChange (date, dateString) {
       console.log('日期....>>>', dateString)
       this.queryParam.bizDate = dateString
@@ -307,19 +308,20 @@ export default {
     handleEdit (record) {
       console.log('>xiugai 查看>>:', record)
       // this.mdl = { ...record }
-      const reqData = {
+      this.mdl = {
         id: record.id,
         bizDate: this.queryParam.bizDate
       }
-      queryRepeatEmailDetail(reqData).then(res => {
-        console.log('>queryRepeatEmailDetail>重复交易文件/对账单>>>id>:', res)
-        if (res.status === 1) {
-          this.visible = true
-          this.mdl = res.dataValue
-        }
-      }).catch(err => {
-        console.log('>queryRepeatEmailDetail>重复交易文件/对账单>>异常列表 by id >:', err)
-      })
+      this.visible = true
+      // queryRepeatEmailDetail(reqData).then(res => {
+      //   console.log('>queryRepeatEmailDetail>重复交易文件/对账单>>>id>:', res)
+      //   if (res.status === 1) {
+      //     this.visible = true
+      //     this.mdl = res.dataValue
+      //   }
+      // }).catch(err => {
+      //   console.log('>queryRepeatEmailDetail>重复交易文件/对账单>>异常列表 by id >:', err)
+      // })
     },
     handleOk (modal) {
       console.log('>modal>子组件发射来的值>:', modal)
