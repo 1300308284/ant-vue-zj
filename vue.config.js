@@ -112,30 +112,30 @@ const vueConfig = {
       //   changeOrigin: true
       // },
       '/emailRule': {
-        // target: 'http://172.23.0.137:8088/',
-        target: 'http://127.0.0.1:8088/',
+        // target: 'http://172.23.0.137:8088/', 10.93.45.213
+        target: 'http://10.93.45.213:8088/',
         ws: true,
         changeOrigin: true
       },
       '/emailAccount': {
         // target: 'http://172.23.0.137:8088/',
-        target: 'http://127.0.0.1:8088/',
+        target: 'http://10.93.45.213:8088/',
         ws: true,
         changeOrigin: true
       },
       '/emailAccountBiz': {
         // target: 'http://172.23.0.137:8088/',
-        target: 'http://127.0.0.1:8088/',
+        target: 'http://10.93.45.213:8088/',
         ws: true,
         changeOrigin: true
       },
       '/valuationTime': {
-        target: 'http://127.0.0.1:8088/',
+        target: 'http://10.93.45.213:8088/',
         ws: true,
         changeOrigin: true
       },
       '/repeatEmail': {
-        target: 'http://127.0.0.1:8088/',
+        target: 'http://10.93.45.213:8088/',
         ws: true,
         changeOrigin: true
       }
