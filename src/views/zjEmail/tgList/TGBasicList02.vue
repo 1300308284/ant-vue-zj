@@ -159,7 +159,8 @@ import CreateForm from './modules/CreateForm02'
 
 const columns = [
   {
-    title: '序号',
+        title: '序号',
+    width: '60px',
     scopedSlots: { customRender: 'serial' }
   },
   {

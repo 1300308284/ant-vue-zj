@@ -62,7 +62,8 @@ import {
   } from '@/api/zjApis/repeatEmail/index'
 const columns = [
   {
-    title: '序号',
+        title: '序号',
+    width: '60px',
     scopedSlots: { customRender: 'serial' }
   },
   {
