@@ -114,10 +114,12 @@ const columns = [
   },
   {
     title: '账套号',
+    width: '110px',
     dataIndex: 'faccountCode'
   },
   {
     title: '基金代码',
+    width: '110px',
     dataIndex: 'fundCode'
   },
   {
@@ -126,10 +128,12 @@ const columns = [
   },
   {
     title: '估值时效',
+    width: '110px',
     dataIndex: 'valBatchName'
   },
   {
     title: '券商\\期货商',
+    width: '110px',
     dataIndex: 'dealerName'
   },
   {
@@ -146,6 +150,7 @@ const columns = [
   },
   // {
   //   title: '启用',
+  //   width: '60px',
   //   scopedSlots: { customRender: 'status' }
   // },
   {

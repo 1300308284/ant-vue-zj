@@ -140,6 +140,7 @@ const columns = [
   },
   {
     title: '启用',
+    width: '60px',
     scopedSlots: { customRender: 'status' }
   },
   {

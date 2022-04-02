@@ -31,7 +31,7 @@
           </template>
         </span> -->
         <span slot="receivedTime" slot-scope="text, record">
-          {{ moment(record.receivedTime).format('YY-MM-DD HH:mm') }}
+          {{ moment(record.receivedTime).format('YYYY-MM-DD HH:mm') }}
         </span>
         <!-- <span slot="description" slot-scope="text">
           <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
@@ -105,6 +105,7 @@ const columns = [
   }
   // {
   //   title: '启用',
+  //   width: '60px',
   //   scopedSlots: { customRender: 'status' }
   // },
   // {
