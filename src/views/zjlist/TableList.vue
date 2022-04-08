@@ -134,42 +134,51 @@ const columns = [
   {
     title: '账套号',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'no'
   },
   {
     title: '基金代码',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'no'
   },
   {
     title: '产品名称',
+    ellipsis: true,
     dataIndex: 'no'
   },
   {
     title: '估值时效',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'no'
   },
   {
     title: '券商\\期货商',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'no'
   },
   {
     title: '标题',
+    ellipsis: true,
     dataIndex: 'no'
   },
   {
     title: '发件人',
+    ellipsis: true,
     dataIndex: 'no'
   },
   {
     title: '附件个数',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'no'
   },
   {
     title: '密码文件名',
+    ellipsis: true,
     dataIndex: 'no'
   }
   // {

@@ -182,38 +182,49 @@ const columns = [
   {
     title: '账套号',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'faccountCode'
   },
   {
     title: '基金代码',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'fundCode'
   },
   {
     title: '产品名称',
+    ellipsis: true,
     dataIndex: 'productName'
+    // sorter: true,
+    // needTotal: true
+    // customRender: (text) => text + ' 次'
   },
   {
     title: '估值批次',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'valBatchName'
   },
   {
     title: '券商\\期货商',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'dealerName'
   },
   {
     title: '标题',
+    ellipsis: true,
     dataIndex: 'title'
   },
   {
     title: '发件人',
+    ellipsis: true,
     dataIndex: 'senders'
   },
   {
     title: '附件个数',
     width: '110px',
+    ellipsis: true,
     dataIndex: 'attachCount'
   },
   {

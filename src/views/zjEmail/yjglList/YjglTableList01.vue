@@ -120,22 +120,27 @@ const columns = [
   },
   {
     title: '邮箱账号',
+    ellipsis: true,
     dataIndex: 'account'
   },
   {
     title: '邮箱服务器',
+    ellipsis: true,
     dataIndex: 'emailServer'
   },
   {
     title: '附件存储根路径',
+    ellipsis: true,
     dataIndex: 'attachRootPath'
   },
   {
     title: '描述',
+    ellipsis: true,
     dataIndex: 'comments'
   },
   {
     title: '推送',
+    ellipsis: true,
     scopedSlots: { customRender: 'pushFlg' }
   },
   {

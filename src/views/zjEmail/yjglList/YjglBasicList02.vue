@@ -145,14 +145,17 @@ const columns = [
   },
   {
     title: '邮箱账号',
+    ellipsis: true,
     dataIndex: 'account'
   },
   {
     title: '业务名称',
+    ellipsis: true,
     dataIndex: 'bizName'
   },
   {
     title: '收发标志',
+    ellipsis: true,
     dataIndex: 'xferFlgName'
   },
   // {

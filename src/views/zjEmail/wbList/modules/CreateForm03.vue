@@ -68,39 +68,48 @@ const columns = [
   },
   {
     title: '产品名称',
+    ellipsis: true,
     dataIndex: 'productName'
   },
   {
     title: '邮箱',
+    ellipsis: true,
     dataIndex: 'account'
   },
   {
     title: '标题',
+    ellipsis: true,
     dataIndex: 'subject'
   },
   {
     title: '发件人',
+    ellipsis: true,
     dataIndex: 'sender'
   },
   {
     title: '收件人',
+    ellipsis: true,
     dataIndex: 'recipients'
   },
   {
     title: '抄送',
+    ellipsis: true,
     dataIndex: 'cc'
   },
   {
     title: '密送',
+    ellipsis: true,
     dataIndex: 'bcc'
   },
   {
     title: '收件时间',
+    ellipsis: true,
     // dataIndex: 'receivedTime'
     scopedSlots: { customRender: 'receivedTime' }
   },
   {
     title: '附件文件名',
+    ellipsis: true,
     dataIndex: 'fileName'
   }
   // {

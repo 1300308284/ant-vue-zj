@@ -128,22 +128,27 @@ const columns = [
   },
   {
     title: '估值批次',
+    ellipsis: true,
     dataIndex: 'valBatchName'
   },
   {
     title: '业务日期',
+    ellipsis: true,
     dataIndex: 'notifyDate'
   },
   {
     title: '数据准备时间',
+    ellipsis: true,
     dataIndex: 'notifyTime'
   },
   {
     title: '托管组收件人',
+    ellipsis: true,
     dataIndex: 'custodyRecipients'
   },
   {
     title: '外包组收件人',
+    ellipsis: true,
     dataIndex: 'wbRecipients'
   },
   // {
