@@ -60,3 +60,8 @@ export default {
   }
 }
 </script>
+<style lang="less">
+.ant-pro-global-header .ant-pro-global-header-index-action i {
+  color: #fff;
+}
+</style>

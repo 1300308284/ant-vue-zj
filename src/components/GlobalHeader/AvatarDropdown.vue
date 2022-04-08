@@ -69,6 +69,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.ant-pro-account-avatar{
+  color: #fff;
+}
 .ant-pro-drop-down {
   /deep/ .action {
     margin-right: 8px;

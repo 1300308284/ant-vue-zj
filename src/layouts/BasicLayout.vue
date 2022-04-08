@@ -191,6 +191,22 @@ export default {
 @import "./BasicLayout.less";
 
  .ant-pro-global-header-trigger .anticon {
-   color: #fff;
+    color: #fff;
+ }
+ .ant-pro-sider-menu-sider.light .ant-pro-sider-menu-logo{
+    background: #343a40;
+    webkit-box-shadow: none;
+    box-shadow: none;
+ }
+ .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
+    border-radius: 6px;
+    background-color: rgba(255,255,255,0.9);
+ }
+ .ant-empty-normal{
+    color: rgb(255, 255, 255, 0.85);
+ }
+ .ant-table-column-title{
+    font-weight: 600;
+  //  font-family: sans-serif; // 需要下载字体
  }
 </style>
