@@ -13,7 +13,7 @@
       广告代码 真实项目中请移除
       production remove this Ads
     -->
-    <ads v-if="isProPreviewSite && !collapsed"/>
+    <!-- <ads v-if="isProPreviewSite && !collapsed"/> -->
     <!-- Ads end -->
 
     <!-- 1.0.0+ 版本 pro-layout 提供 API，
@@ -29,13 +29,13 @@
     <!-- 1.0.0+ 版本 pro-layout 提供 API,
           增加 Header 左侧内容区自定义
     -->
-    <template v-slot:headerContentRender>
+    <!-- <template v-slot:headerContentRender>
       <div>
         <a-tooltip title="刷新页面">
           <a-icon type="reload" style="font-size: 18px;color: #fff;cursor: pointer;" @click="() => { $message.info('页面刷新') }" />
         </a-tooltip>
       </div>
-    </template>
+    </template> -->
 
     <setting-drawer v-if="isDev" :settings="settings" @change="handleSettingChange">
       <div style="margin: 12px 0;">
@@ -64,7 +64,7 @@ import defaultSettings from '@/config/defaultSettings'
 import { asyncRouterMap } from '@/config/router.config.js'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import GlobalFooter from '@/components/GlobalFooter'
-import Ads from '@/components/Other/CarbonAds'
+// import Ads from '@/components/Other/CarbonAds'
 import LogoSvg from '../assets/logo.svg?inline'
 
 export default {
@@ -73,8 +73,8 @@ export default {
     SettingDrawer,
     RightContent,
     GlobalFooter,
-    LogoSvg,
-    Ads
+    LogoSvg
+    // Ads
   },
   data () {
     return {
