@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    :title="model && model.id > 0 ? '修改邮箱绑定业务' : '新建邮箱绑定业务'"
+    :title="model && model.id > 0 ? '修改邮箱' : '新建邮箱'"
     :width="'calc(100vw - 500px)'"
     :visible="visible"
     :confirmLoading="loading"
