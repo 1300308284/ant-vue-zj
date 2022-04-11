@@ -209,4 +209,8 @@ export default {
     font-weight: 600;
   //  font-family: sans-serif; // 需要下载字体
  }
+ // 分页按钮白色
+ .ant-pagination-disabled a, .ant-pagination-disabled:hover a, .ant-pagination-disabled:focus a, .ant-pagination-disabled .ant-pagination-item-link, .ant-pagination-disabled:hover .ant-pagination-item-link, .ant-pagination-disabled:focus .ant-pagination-item-link {
+   color: #fff;
+ }
 </style>
