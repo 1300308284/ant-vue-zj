@@ -193,18 +193,22 @@ export default {
  .ant-pro-global-header-trigger .anticon {
     color: #fff;
  }
+ // 左上角logo背景色及阴影边框
  .ant-pro-sider-menu-sider.light .ant-pro-sider-menu-logo{
     background: #343a40;
     webkit-box-shadow: none;
     box-shadow: none;
  }
+ // 左侧菜单 选中时背景色及边框
  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
     border-radius: 6px;
     background-color: rgba(255,255,255,0.9);
  }
+ // 列表空时 图标字体色
  .ant-empty-normal{
     color: rgb(255, 255, 255, 0.85);
  }
+ // table 表头字重
  .ant-table-column-title{
     font-weight: 600;
   //  font-family: sans-serif; // 需要下载字体
