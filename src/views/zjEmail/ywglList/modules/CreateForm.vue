@@ -12,7 +12,7 @@
         <a-row :gutter="48">
           <a-col :md="12" :sm="24">
             <a-form-item label="估值批次">
-              <a-input v-decorator.trim="['valBatchName']" @change="handleFaccountCodeChange"/>
+              <a-input v-decorator.trim="['valBatchName']" @keyup.enter.native="handleFaccountCodeChange"/>
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
