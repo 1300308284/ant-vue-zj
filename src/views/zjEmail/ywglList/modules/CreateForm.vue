@@ -29,8 +29,7 @@
           <a-col :md="12" :sm="24">
             <a-form-item label="数据准备时间">
               <a-time-picker
-                v-decorator.trim="['notifyTime']"
-                :default-value="moment('12:08', 'HH:mm')"
+                v-decorator.trim="['notifyTime', {initialValue: moment(new Date(), 'HH:mm')}]"
                 @change="handleOnChangeTime"
                 format="HH:mm" />
               <!-- <a-input :disabled="false" v-decorator.trim="['notifyTime']" /> -->
@@ -99,7 +98,7 @@ const fields = [
   'attachCount',
   'ciperFileName',
   'ciper',
-  'status',
+  // 'status',
   'custodyRecipients',
   'wbRecipients',
   'notifyTime',
