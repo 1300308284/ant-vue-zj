@@ -64,16 +64,17 @@
         </a-row>
 
         <a-row :gutter="48">
-          <a-col :md="12" :sm="24">
+          <!-- <a-col :md="12" :sm="24"> -->
+          <a-col class="item-style-fulline">
             <a-form-item label="发件人">
               <a-input v-decorator.trim="['senders']" />
             </a-form-item>
           </a-col>
-          <a-col :md="12" :sm="24">
-            <a-form-item label="附件个数">
+          <!-- <a-col :md="12" :sm="24">
+            <a-form-item label="附件个数8">
               <a-input v-decorator.trim="['attachCount']" />
             </a-form-item>
-          </a-col>
+          </a-col> -->
         </a-row>
         <a-row>
           <a-col class="item-style-fulline">

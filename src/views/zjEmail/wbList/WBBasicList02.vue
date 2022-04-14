@@ -202,11 +202,11 @@ const columns = [
     ellipsis: true,
     dataIndex: 'senders'
   },
-  {
-    title: '附件个数',
-    width: '90px',
-    dataIndex: 'attachCount'
-  },
+  // {
+  //   title: '附件个数',
+  //   width: '90px',
+  //   dataIndex: 'attachCount'
+  // },
   {
     title: '启用',
     width: '60px',
